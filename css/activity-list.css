@@ -1,0 +1,52 @@
+.activity-list-modal .modal-content {
+    max-width: 600px;
+}
+
+.activity-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 15px 0;
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+}
+
+.activity-list-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-radius: 4px;
+    background-color: white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.activity-list-item .activity-emoji {
+    font-size: 24px;
+    margin-right: 15px;
+}
+
+.activity-list-item .activity-name {
+    flex-grow: 1;
+    font-size: 16px;
+}
+
+.activity-list-item .edit-activity-button {
+    background-color: #f0f0f0;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.activity-list-item .edit-activity-button:hover {
+    background-color: #e0e0e0;
+    transform: scale(1.1);
+}

@@ -1,0 +1,35 @@
+/* Media Queries for Activities Grid */
+@media screen and (max-width: 1200px) {
+    .activities-list {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .activities-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .activities-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Media Queries for Dashboard */
+@media screen and (max-width: 768px) {
+    .top-action-bar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .add-student-button-top, 
+    .reset-data-button {
+        margin: 5px 0;
+    }
+    
+    .reset-data-button {
+        margin-left: 0;
+    }
+}

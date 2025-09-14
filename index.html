@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classroom Activity Tracker</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/media-queries.css">
+    <link rel="stylesheet" href="css/student-rows.css">
+    <link rel="stylesheet" href="css/modal.css">
+    <link rel="stylesheet" href="css/activity-list.css">
+    <link rel="stylesheet" href="css/tabs.css">
+</head>
+<body>
+    <!-- Lock button (available on student screens) -->
+    <button id="lock-button" aria-label="Lock">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+            <path d="M12 1C8.676 1 6 3.676 6 7v2H4v14h16V9h-2V7c0-3.324-2.676-6-6-6zm0 2c2.276 0 4 1.724 4 4v2H8V7c0-2.276 1.724-4 4-4zm-6 8h12v10H6V11z"/>
+        </svg>
+    </button>
+    
+    <!-- Student Name Selection Screen -->
+    <div id="student-select-screen" class="screen">
+        <h1>Select Your Name</h1>
+        <div id="student-list" class="selection-list">
+            <!-- Student names will be populated from JavaScript -->
+        </div>
+    </div>
+    
+    <!-- Student Activities Screen -->
+    <div id="student-activities-screen" class="screen">
+        <button id="back-to-names-button" class="navigation-button">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+            </svg>
+        </button>
+        <h1>Your Activities Today</h1>
+        <h2 id="student-name-display"></h2>
+        <div id="student-activities-list" class="activities-list">
+            <!-- Activities will be populated from JavaScript -->
+        </div>
+    </div>
+    
+    <!-- Teacher Passcode Screen -->
+    <div id="passcode-screen" class="screen">
+        <button id="back-from-passcode-button" class="navigation-button">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+            </svg>
+        </button>
+        <h1>Teacher Access</h1>
+        <div class="passcode-container">
+            <input type="password" id="passcode-input" placeholder="Enter passcode" maxlength="4">
+            <button id="submit-passcode">Enter</button>
+        </div>
+    </div>
+    
+    <!-- Teacher Management Screen -->
+    <div id="teacher-screen" class="screen">
+        <button id="back-to-student-button" class="navigation-button">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+            </svg>
+        </button>
+        <h1>Classroom Management</h1>
+        
+        <!-- Tab navigation -->
+        <div class="tab-navigation">
+            <button class="tab-button active" data-tab="tracking-tab">Tracking</button>
+            <button class="tab-button" data-tab="activities-tab">Activities</button>
+        </div>
+        
+        <!-- Tracking Tab Content -->
+        <div id="tracking-tab" class="tab-content active">
+            <!-- Direct Add Student button before the grid -->
+            <div class="top-action-bar">
+                <button id="add-student-button" onclick="window.addStudentDirectly()" class="add-student-button-top">+ ADD STUDENT</button>
+                <button id="reset-data-button" class="reset-data-button">RESET DATA</button>
+            </div>
+            
+            <div class="spreadsheet-container full-width" id="tracking-container">
+                <div class="spreadsheet-header" id="tracking-header">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+                <div id="tracking-table" class="spreadsheet-body">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Activities Tab Content -->
+        <div id="activities-tab" class="tab-content">
+            <div class="activities-management">
+                <div class="top-action-bar">
+                    <button id="add-activity-button" class="add-activity-button">+ ADD ACTIVITY</button>
+                </div>
+                <div class="activities-list-container">
+                    <table class="activities-table">
+                        <thead>
+                            <tr>
+                                <th>Emoji</th>
+                                <th>Activity Name</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="activities-table-body">
+                            <!-- Will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Activity Modal for adding/editing activities with emoji selection -->
+    <div id="activity-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Add Activity</h2>
+            <div class="modal-form">
+                <div class="form-group">
+                    <label for="activity-name">Activity Name:</label>
+                    <input type="text" id="activity-name" placeholder="Enter activity name">
+                </div>
+                <div class="form-group">
+                    <label>Select an Emoji:</label>
+                    <div class="emoji-selector">
+                        <div class="emoji-grid">
+                            <span class="emoji-option" data-emoji="📚">📚</span>
+                            <span class="emoji-option" data-emoji="🧮">🧮</span>
+                            <span class="emoji-option" data-emoji="🔬">🔬</span>
+                            <span class="emoji-option" data-emoji="🎨">🎨</span>
+                            <span class="emoji-option" data-emoji="📝">📝</span>
+                            <span class="emoji-option" data-emoji="💻">💻</span>
+                            <span class="emoji-option" data-emoji="🏃">🏃</span>
+                            <span class="emoji-option" data-emoji="🎵">🎵</span>
+                            <span class="emoji-option" data-emoji="🌎">🌎</span>
+                            <span class="emoji-option" data-emoji="🧩">🧩</span>
+                            <span class="emoji-option" data-emoji="📖">📖</span>
+                            <span class="emoji-option" data-emoji="🎮">🎮</span>
+                            <span class="emoji-option" data-emoji="🎭">🎭</span>
+                            <span class="emoji-option" data-emoji="🏛️">🏛️</span>
+                            <span class="emoji-option" data-emoji="🗣️">🗣️</span>
+                            <span class="emoji-option" data-emoji="📊">📊</span>
+                        </div>
+                        <input type="text" id="selected-emoji" value="📚" readonly>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button id="save-activity" class="btn-primary">Save Activity</button>
+                    <button class="close-modal-btn btn-secondary">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="js/script.js"></script>
+    <script src="js/activity-card.js"></script>
+    <script src="js/modal.js"></script>
+    <script src="js/activity-list.js"></script>
+    <script src="js/tabs.js"></script>
+</body>
+</html>
