@@ -228,6 +228,9 @@ document.addEventListener('DOMContentLoaded', function() {
         // Show the modal
         modal.style.display = 'block';
         
+        // Since we're using the openActivityModal function from modal.js now,
+        // we don't need to add a separate event listener here
+        /* 
         // Remove old event listeners from the save button
         const newSaveButton = saveButton.cloneNode(true);
         saveButton.parentNode.replaceChild(newSaveButton, saveButton);
@@ -252,6 +255,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Close the modal
             modal.style.display = 'none';
         });
+        */
     }
     
     // Function to add a new activity
@@ -327,6 +331,8 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Function to update an existing activity
     function updateActivity(id, name, emoji) {
+        console.log(`Updating activity ${id} with name: ${name} and emoji: ${emoji}`);
+        
         // Get activities from localStorage
         let activities = [];
         
@@ -351,11 +357,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 window.activities = activities;
             }
             
-            // Re-render activities table and tracking table
-            renderActivitiesTable();
-            if (typeof window.renderTrackingTable === 'function') {
-                window.renderTrackingTable();
+            // Make sure the student list will be refreshed when returning to that screen
+            if (typeof window.refreshStudentList === 'function') {
+                // Set a flag to indicate we should refresh
+                localStorage.setItem('needStudentListRefresh', 'true');
             }
+        }
+        
+        // Re-render activities table and tracking table
+        renderActivitiesTable();
+        if (typeof window.renderTrackingTable === 'function') {
+            window.renderTrackingTable();
         }
     }
     

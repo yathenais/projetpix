@@ -4,6 +4,11 @@ document.addEventListener('DOMContentLoaded', function() {
     let activities = [];
     let tracking = {};
     
+    // Make data accessible globally for other scripts
+    window.students = students;
+    window.activities = activities;
+    window.tracking = tracking;
+    
     // Default passcode - in a real app this would be securely stored server-side
     const TEACHER_PASSCODE = "1234";
     
@@ -269,9 +274,19 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Save data to localStorage
     function saveData() {
-        localStorage.setItem('students', JSON.stringify(students));
-        localStorage.setItem('activities', JSON.stringify(activities));
-        localStorage.setItem('tracking', JSON.stringify(tracking));
+        try {
+            localStorage.setItem('students', JSON.stringify(students));
+            localStorage.setItem('activities', JSON.stringify(activities));
+            localStorage.setItem('tracking', JSON.stringify(tracking));
+            console.log("Data saved successfully");
+        } catch (e) {
+            if (e.name === 'QuotaExceededError') {
+                alert('Storage limit exceeded. Some image data might be too large.');
+                console.error('Storage quota exceeded:', e);
+            } else {
+                console.error('Error saving data:', e);
+            }
+        }
     }
     
     // Hide all screens
@@ -299,6 +314,12 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Render the student selection list
     function renderStudentList() {
+        // Ensure we have the latest student data from localStorage
+        const latestStudents = JSON.parse(localStorage.getItem('students') || '[]');
+        if (latestStudents.length > 0) {
+            students = latestStudents; // Update the in-memory array with latest data
+        }
+        
         studentListElement.innerHTML = '';
         
         students.forEach(student => {
@@ -368,13 +389,24 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Set data attribute for status-based styling
                 activityElement.setAttribute('data-status', status);
                 
-                // Create activity emoji element if available
-                if (activity.emoji) {
-                    const emojiElement = document.createElement('div');
-                    emojiElement.classList.add('activity-emoji');
-                    emojiElement.textContent = activity.emoji;
-                    activityElement.appendChild(emojiElement);
+                // Create activity icon element (emoji or image)
+                const iconElement = document.createElement('div');
+                iconElement.classList.add('activity-emoji');
+                
+                if (activity.imageData) {
+                    // Create an image element if the activity has an image
+                    const imgElement = document.createElement('img');
+                    imgElement.src = activity.imageData;
+                    imgElement.alt = activity.name;
+                    imgElement.classList.add('activity-image');
+                    iconElement.appendChild(imgElement);
+                    iconElement.classList.add('activity-image-container');
+                } else if (activity.emoji) {
+                    // Display emoji if available
+                    iconElement.textContent = activity.emoji;
                 }
+                
+                activityElement.appendChild(iconElement);
                 
                 // Create activity name element
                 const nameElement = document.createElement('div');
@@ -462,13 +494,24 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Set data attribute for status-based styling
                 activityElement.setAttribute('data-status', status);
                 
-                // Create activity emoji element if available
-                if (activity.emoji) {
-                    const emojiElement = document.createElement('div');
-                    emojiElement.classList.add('activity-emoji');
-                    emojiElement.textContent = activity.emoji;
-                    activityElement.appendChild(emojiElement);
+                // Create activity icon element (emoji or image)
+                const iconElement = document.createElement('div');
+                iconElement.classList.add('activity-emoji');
+                
+                if (activity.imageData) {
+                    // Create an image element if the activity has an image
+                    const imgElement = document.createElement('img');
+                    imgElement.src = activity.imageData;
+                    imgElement.alt = activity.name;
+                    imgElement.classList.add('activity-image');
+                    iconElement.appendChild(imgElement);
+                    iconElement.classList.add('activity-image-container');
+                } else if (activity.emoji) {
+                    // Display emoji if available
+                    iconElement.textContent = activity.emoji;
                 }
+                
+                activityElement.appendChild(iconElement);
                 
                 // Create activity name element
                 const nameElement = document.createElement('div');
@@ -931,8 +974,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     activities.forEach(act => {
                         const option = document.createElement('option');
                         option.value = act.id;
-                        // Include emoji in dropdown text if available
-                        option.textContent = act.emoji ? `${act.emoji} ${act.name}` : act.name;
+                        
+                        // Include emoji or image indicator in dropdown text
+                        if (act.imageData) {
+                            option.textContent = `🖼️ ${act.name}`;
+                        } else {
+                            option.textContent = act.emoji ? `${act.emoji} ${act.name}` : act.name;
+                        }
+                        
                         if (act.id === slotInfo.activityId) {
                             option.selected = true;
                         }
@@ -1291,12 +1340,37 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Back button from activities to student selection
     backToNamesButton.addEventListener('click', function() {
+        console.log("Back button clicked, returning to student selection screen");
+        
         // Clear saved screen state
         localStorage.removeItem('currentScreen');
         
+        // Hide all screens first
         hideAllScreens();
+        
+        // Show the student selection screen
         studentSelectScreen.style.display = 'flex';
+        
+        // Use our global refresh function if available
+        if (typeof window.refreshStudentList === 'function') {
+            window.refreshStudentList();
+            console.log("Used global refresh function");
+        } else {
+            // Fallback to the original method
+            // Force a complete reload of all data from localStorage
+            students = JSON.parse(localStorage.getItem('students') || '[]');
+            activities = JSON.parse(localStorage.getItem('activities') || '[]');
+            tracking = JSON.parse(localStorage.getItem('tracking') || '{}');
+            
+            renderStudentList();
+            console.log("Used fallback refresh method");
+        }
+        
+        // Toggle lock button visibility
         toggleLockButtonVisibility();
+        
+        // Clear any refresh flags
+        localStorage.removeItem('needStudentListRefresh');
     });
     
     // Back button from passcode to previous screen
@@ -1410,6 +1484,10 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Expose functions to the global scope for use in fallback implementations
     window.renderTrackingTable = renderTrackingTable;
+    window.showStudentActivities = showStudentActivities;
+    window.renderStudentList = renderStudentList;
+    window.saveData = saveData;
+    window.loadData = loadData;
     window.activities = activities;
     window.tracking = tracking;
     

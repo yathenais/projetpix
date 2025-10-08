@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="css/modal.css">
     <link rel="stylesheet" href="css/activity-list.css">
     <link rel="stylesheet" href="css/tabs.css">
+    <link rel="stylesheet" href="css/activity-images.css">
 </head>
 <body>
     <!-- Lock button (available on student screens) -->
@@ -123,27 +124,51 @@
                     <input type="text" id="activity-name" placeholder="Enter activity name">
                 </div>
                 <div class="form-group">
-                    <label>Select an Emoji:</label>
-                    <div class="emoji-selector">
-                        <div class="emoji-grid">
-                            <span class="emoji-option" data-emoji="📚">📚</span>
-                            <span class="emoji-option" data-emoji="🧮">🧮</span>
-                            <span class="emoji-option" data-emoji="🔬">🔬</span>
-                            <span class="emoji-option" data-emoji="🎨">🎨</span>
-                            <span class="emoji-option" data-emoji="📝">📝</span>
-                            <span class="emoji-option" data-emoji="💻">💻</span>
-                            <span class="emoji-option" data-emoji="🏃">🏃</span>
-                            <span class="emoji-option" data-emoji="🎵">🎵</span>
-                            <span class="emoji-option" data-emoji="🌎">🌎</span>
-                            <span class="emoji-option" data-emoji="🧩">🧩</span>
-                            <span class="emoji-option" data-emoji="📖">📖</span>
-                            <span class="emoji-option" data-emoji="🎮">🎮</span>
-                            <span class="emoji-option" data-emoji="🎭">🎭</span>
-                            <span class="emoji-option" data-emoji="🏛️">🏛️</span>
-                            <span class="emoji-option" data-emoji="🗣️">🗣️</span>
-                            <span class="emoji-option" data-emoji="📊">📊</span>
+                    <label>Choose an Icon Type:</label>
+                    <div class="icon-type-selector">
+                        <button type="button" id="emoji-tab-button" class="icon-tab-button active">Emoji</button>
+                        <button type="button" id="image-tab-button" class="icon-tab-button">Image Upload</button>
+                    </div>
+                    
+                    <div id="emoji-tab-content" class="icon-tab-content active">
+                        <div class="emoji-selector">
+                            <div class="emoji-grid">
+                                <span class="emoji-option" data-emoji="📚">📚</span>
+                                <span class="emoji-option" data-emoji="🧮">🧮</span>
+                                <span class="emoji-option" data-emoji="🔬">🔬</span>
+                                <span class="emoji-option" data-emoji="🎨">🎨</span>
+                                <span class="emoji-option" data-emoji="📝">📝</span>
+                                <span class="emoji-option" data-emoji="💻">💻</span>
+                                <span class="emoji-option" data-emoji="🏃">🏃</span>
+                                <span class="emoji-option" data-emoji="🎵">🎵</span>
+                                <span class="emoji-option" data-emoji="🌎">🌎</span>
+                                <span class="emoji-option" data-emoji="🧩">🧩</span>
+                                <span class="emoji-option" data-emoji="📖">📖</span>
+                                <span class="emoji-option" data-emoji="🎮">🎮</span>
+                                <span class="emoji-option" data-emoji="🎭">🎭</span>
+                                <span class="emoji-option" data-emoji="🏛️">🏛️</span>
+                                <span class="emoji-option" data-emoji="🗣️">🗣️</span>
+                                <span class="emoji-option" data-emoji="📊">📊</span>
+                            </div>
+                            <input type="text" id="selected-emoji" value="📚" readonly>
                         </div>
-                        <input type="text" id="selected-emoji" value="📚" readonly>
+                    </div>
+                    
+                    <div id="image-tab-content" class="icon-tab-content">
+                        <div class="image-upload-container">
+                            <div class="image-preview-container">
+                                <img id="image-preview" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMjQgMjQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2NjY2NjYyIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxyZWN0IHg9IjMiIHk9IjMiIHdpZHRoPSIxOCIgaGVpZ2h0PSIxOCIgcng9IjIiIHJ5PSIyIj48L3JlY3Q+PGNpcmNsZSBjeD0iOC41IiBjeT0iOC41IiByPSIxLjUiPjwvY2lyY2xlPjxwb2x5bGluZSBwb2ludHM9IjIxIDE1IDEwIDIxIDMgMTUiPjwvcG9seWxpbmU+PC9zdmc+" alt="Preview">
+                                <div class="no-image-message">No image selected</div>
+                            </div>
+                            <div class="image-upload-actions">
+                                <label for="image-upload" class="custom-file-upload">
+                                    Choose Image
+                                </label>
+                                <input type="file" id="image-upload" accept="image/*">
+                                <button id="remove-image" class="btn-secondary" disabled>Remove</button>
+                            </div>
+                            <input type="hidden" id="image-data" value="">
+                        </div>
                     </div>
                 </div>
                 <div class="form-actions">
@@ -154,10 +179,116 @@
         </div>
     </div>
     
+    <script src="js/student-refresh.js"></script>
     <script src="js/script.js"></script>
-    <script src="js/activity-card.js"></script>
     <script src="js/modal.js"></script>
+    <script src="js/activity-card.js"></script>
     <script src="js/activity-list.js"></script>
     <script src="js/tabs.js"></script>
+    
+    <!-- Direct fix for the save activity button -->
+    <script>
+        // Wait for the DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get the save button
+            const saveBtn = document.getElementById('save-activity');
+            
+            if (saveBtn) {
+                // Remove all existing event listeners by replacing the button
+                const newSaveBtn = saveBtn.cloneNode(true);
+                saveBtn.parentNode.replaceChild(newSaveBtn, saveBtn);
+                
+                // Add a new click handler
+                newSaveBtn.addEventListener('click', function() {
+                    console.log("DIRECT FIX: Save button clicked");
+                    
+                    // Get the modal elements
+                    const modal = document.getElementById('activity-modal');
+                    const nameInput = document.getElementById('activity-name');
+                    const emojiInput = document.getElementById('selected-emoji');
+                    const imageDataInput = document.getElementById('image-data');
+                    
+                    // Get the values
+                    const name = nameInput.value.trim();
+                    if (!name) {
+                        alert('Please enter an activity name');
+                        return;
+                    }
+                    
+                    // Determine if we're using emoji or image
+                    const emojiTab = document.getElementById('emoji-tab-content');
+                    const isEmojiSelected = emojiTab.classList.contains('active');
+                    
+                    // Get activities from localStorage
+                    let activities = [];
+                    try {
+                        activities = JSON.parse(localStorage.getItem('activities')) || [];
+                    } catch (e) {
+                        console.error("Error loading activities:", e);
+                    }
+                    
+                    // Check if we're editing an existing activity
+                    const operation = modal.getAttribute('data-operation');
+                    const activityIdStr = modal.getAttribute('data-activity-id');
+                    const activityId = activityIdStr ? parseInt(activityIdStr) : null;
+                    
+                    console.log("Operation:", operation, "Activity ID:", activityId);
+                    
+                    if (operation === 'edit' && activityId) {
+                        // Edit existing activity
+                        const index = activities.findIndex(a => a.id === activityId);
+                        console.log("Activity index:", index);
+                        if (index !== -1) {
+                            activities[index].name = name;
+                            
+                            if (isEmojiSelected) {
+                                activities[index].emoji = emojiInput.value;
+                                delete activities[index].imageData;
+                            } else {
+                                activities[index].imageData = imageDataInput.value;
+                                delete activities[index].emoji;
+                            }
+                            
+                            console.log("Updated activity:", activities[index]);
+                        } else {
+                            console.error("Activity not found with ID:", activityId);
+                        }
+                    } else {
+                        // Add new activity
+                        const newId = activities.length > 0 ? 
+                            Math.max(...activities.map(a => a.id)) + 1 : 1;
+                        
+                        const newActivity = {
+                            id: newId,
+                            name: name
+                        };
+                        
+                        if (isEmojiSelected) {
+                            newActivity.emoji = emojiInput.value;
+                        } else {
+                            newActivity.imageData = imageDataInput.value;
+                        }
+                        
+                        activities.push(newActivity);
+                        console.log("Added new activity:", newActivity);
+                    }
+                    
+                    // Save to localStorage
+                    localStorage.setItem('activities', JSON.stringify(activities));
+                    
+                    // Close the modal
+                    modal.style.display = 'none';
+                    
+                    // Refresh the UI
+                    if (typeof window.renderActivitiesTable === 'function') {
+                        window.renderActivitiesTable();
+                    }
+                    
+                    // Force a page refresh to ensure everything is updated
+                    location.reload();
+                });
+            }
+        });
+    </script>
 </body>
 </html>

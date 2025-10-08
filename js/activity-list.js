@@ -1,5 +1,15 @@
 // Add the event listener for the edit activities button
 document.addEventListener('DOMContentLoaded', function() {
+    // Get activities from localStorage first
+    let activities = [];
+    try {
+        activities = JSON.parse(localStorage.getItem('activities')) || [];
+        console.log("Activities loaded in activity-list.js:", activities.length);
+    } catch (error) {
+        console.error('Error loading activities in activity-list.js:', error);
+        activities = [];
+    }
+    
     const editActivitiesBtn = document.getElementById('edit-activities-button');
     if (editActivitiesBtn) {
         editActivitiesBtn.addEventListener('click', function() {
@@ -129,10 +139,21 @@ function renderActivitiesTable() {
     activities.forEach(activity => {
         const row = document.createElement('tr');
         
-        // Emoji cell
-        const emojiCell = document.createElement('td');
-        emojiCell.textContent = activity.emoji || '📝';
-        emojiCell.classList.add('emoji-cell');
+        // Icon cell (emoji or image)
+        const iconCell = document.createElement('td');
+        iconCell.classList.add('emoji-cell');
+        
+        if (activity.imageData) {
+            // Create an image element if the activity has an image
+            const imgElement = document.createElement('img');
+            imgElement.src = activity.imageData;
+            imgElement.alt = activity.name;
+            imgElement.classList.add('table-activity-image');
+            iconCell.appendChild(imgElement);
+        } else {
+            // Display emoji if available
+            iconCell.textContent = activity.emoji || '📝';
+        }
         
         // Name cell
         const nameCell = document.createElement('td');
@@ -143,18 +164,24 @@ function renderActivitiesTable() {
         const actionsCell = document.createElement('td');
         actionsCell.classList.add('actions-cell');
         
-        // Edit button
+        // Edit button with pencil icon
         const editButton = document.createElement('button');
         editButton.classList.add('action-button', 'edit-button');
-        editButton.textContent = 'Edit';
+        editButton.textContent = ''; // Clear any text content
+        editButton.innerHTML = '✏️'; // Set icon as HTML content
+        editButton.dataset.icon = 'edit'; // Add data attribute for icon type
+        editButton.title = 'Edit activity';
         editButton.addEventListener('click', function() {
             openActivityModal('edit', activity.id);
         });
         
-        // Delete button
+        // Delete button with red cross icon
         const deleteButton = document.createElement('button');
         deleteButton.classList.add('action-button', 'delete-button');
-        deleteButton.textContent = 'Delete';
+        deleteButton.textContent = ''; // Clear any text content
+        deleteButton.innerHTML = '❌'; // Set icon as HTML content
+        deleteButton.dataset.icon = 'delete'; // Add data attribute for icon type
+        deleteButton.title = 'Delete activity';
         deleteButton.addEventListener('click', function() {
             if (confirm(`Are you sure you want to delete "${activity.name}"?`)) {
                 deleteActivity(activity.id);
@@ -166,7 +193,7 @@ function renderActivitiesTable() {
         actionsCell.appendChild(deleteButton);
         
         // Add cells to row
-        row.appendChild(emojiCell);
+        row.appendChild(iconCell);
         row.appendChild(nameCell);
         row.appendChild(actionsCell);
         

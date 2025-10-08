@@ -1,0 +1,93 @@
+/* Styles for displaying images in activity cards and tables */
+
+/* Activity item images in student view */
+.activity-image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    overflow: hidden;
+}
+
+.activity-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+/* Table activity images */
+.table-activity-image {
+    max-width: 36px;
+    max-height: 36px;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+}
+
+/* Ensure emoji-cell has proper dimensions for images */
+.emoji-cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+}
+
+/* Style for the activities table */
+.activities-table .emoji-cell {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Ensure proper sizing in tracking grid */
+.tracking-activity-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+}
+
+.tracking-activity-icon img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+/* Modal image preview enhancements */
+.image-preview-container.has-image {
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+}
+
+.image-preview-container.has-image img {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+}
+
+/* Make activity cards with images more adaptable */
+.activity-item {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas: 
+        "icon name status";
+    align-items: center;
+    gap: 15px;
+}
+
+.activity-emoji {
+    grid-area: icon;
+}
+
+.activity-name {
+    grid-area: name;
+}
+
+.activity-status {
+    grid-area: status;
+}
