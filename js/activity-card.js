@@ -19,16 +19,16 @@ function renderActivityCard(activityElement, activity, status) {
     statusText.classList.add('activity-status-text');
     
     if (status === 'validated') {
-        statusText.textContent = 'Validated by teacher';
+        statusText.textContent = 'Validé';
         statusText.classList.add('validated-text');
     } else if (status === 'completed') {
-        statusText.textContent = 'Completed';
+        statusText.textContent = 'Terminé';
         statusText.classList.add('completed-text');
     } else if (status === 'in-progress') {
-        statusText.textContent = 'In progress';
+        statusText.textContent = 'En cours';
         statusText.classList.add('in-progress-text');
     } else {
-        statusText.textContent = 'Click to complete';
+        statusText.textContent = 'Cliquez pour terminer';
         statusText.classList.add('not-started-text');
     }
     

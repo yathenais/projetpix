@@ -109,11 +109,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const resetDataButton = document.getElementById('reset-data-button');
         if (resetDataButton) {
             resetDataButton.addEventListener('click', function() {
-                if (confirm('This will reset all activity assignments and their status. Students and activities will be preserved. Continue?')) {
+                if (confirm('Ceci réinitialisera toutes les assignations d\'activités et leur état. Les élèves et activités seront préservés. Continuer ?')) {
                     // Only reset the tracking data (activity assignments and status)
                     resetActivityAssignments();
                     
-                    alert('Activity assignments and status have been reset. You can now reassign activities from scratch.');
+                    alert('Les assignations d\'activités et leur état ont été réinitialisés. Vous pouvez maintenant réassigner les activités depuis le début.');
                 }
             });
         }
@@ -318,7 +318,7 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log("Data saved successfully");
         } catch (e) {
             if (e.name === 'QuotaExceededError') {
-                alert('Storage limit exceeded. Some image data might be too large.');
+                alert('Limite de stockage dépassée. Certaines données d\'image pourraient être trop volumineuses.');
                 console.error('Storage quota exceeded:', e);
             } else {
                 console.error('Error saving data:', e);
@@ -459,16 +459,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 statusText.classList.add('activity-status-text');
                 
                 if (status === 'validated') {
-                    statusText.textContent = 'Validated by teacher';
+                    statusText.textContent = 'Validé';
                     statusText.classList.add('validated-text');
                 } else if (status === 'completed') {
-                    statusText.textContent = 'Completed';
+                    statusText.textContent = 'Terminé';
                     statusText.classList.add('completed-text');
                 } else if (status === 'in-progress') {
-                    statusText.textContent = 'In progress';
+                    statusText.textContent = 'En cours';
                     statusText.classList.add('in-progress-text');
                 } else {
-                    statusText.textContent = 'Click to complete';
+                    statusText.textContent = 'Cliquez pour terminer';
                     statusText.classList.add('not-started-text');
                 }
                 
@@ -564,16 +564,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 statusText.classList.add('activity-status-text');
                 
                 if (status === 'validated') {
-                    statusText.textContent = 'Validated by teacher';
+                    statusText.textContent = 'Validé par l\'enseignant';
                     statusText.classList.add('validated-text');
                 } else if (status === 'completed') {
-                    statusText.textContent = 'Completed';
+                    statusText.textContent = 'Complété';
                     statusText.classList.add('completed-text');
                 } else if (status === 'in-progress') {
-                    statusText.textContent = 'In progress';
+                    statusText.textContent = 'En cours';
                     statusText.classList.add('in-progress-text');
                 } else {
-                    statusText.textContent = 'Click to complete';
+                    statusText.textContent = 'Appuyer pour compléter';
                     statusText.classList.add('not-started-text');
                 }
                 
@@ -684,9 +684,9 @@ document.addEventListener('DOMContentLoaded', function() {
             
             const editBtn = document.createElement('button');
             editBtn.classList.add('edit-btn');
-            editBtn.textContent = 'Edit';
+            editBtn.textContent = 'Modifier';
             editBtn.addEventListener('click', function() {
-                const newName = prompt('Enter new name:', student.name);
+                const newName = prompt('Entrez le nouveau nom :', student.name);
                 if (newName && newName.trim() !== '') {
                     student.name = newName.trim();
                     saveData();
@@ -698,9 +698,9 @@ document.addEventListener('DOMContentLoaded', function() {
             
             const deleteBtn = document.createElement('button');
             deleteBtn.classList.add('delete-btn');
-            deleteBtn.textContent = 'Delete';
+            deleteBtn.textContent = 'Supprimer';
             deleteBtn.addEventListener('click', function() {
-                if (confirm(`Are you sure you want to delete ${student.name}?`)) {
+                if (confirm(`Êtes-vous sûr de vouloir supprimer ${student.name} ?`)) {
                     deleteStudent(student.id);
                 }
             });
@@ -759,9 +759,9 @@ document.addEventListener('DOMContentLoaded', function() {
             
             const editBtn = document.createElement('button');
             editBtn.classList.add('edit-btn');
-            editBtn.textContent = 'Edit';
+            editBtn.textContent = 'Modifier';
             editBtn.addEventListener('click', function() {
-                const newName = prompt('Enter new activity name:', activity.name);
+                const newName = prompt('Entrez le nouveau nom d\'activité :', activity.name);
                 if (newName && newName.trim() !== '') {
                     activity.name = newName.trim();
                     saveData();
@@ -772,9 +772,9 @@ document.addEventListener('DOMContentLoaded', function() {
             
             const deleteBtn = document.createElement('button');
             deleteBtn.classList.add('delete-btn');
-            deleteBtn.textContent = 'Delete';
+            deleteBtn.textContent = 'Supprimer';
             deleteBtn.addEventListener('click', function() {
-                if (confirm(`Are you sure you want to delete ${activity.name}?`)) {
+                if (confirm(`Êtes-vous sûr de vouloir supprimer ${activity.name} ?`)) {
                     deleteActivity(activity.id);
                 }
             });
@@ -875,7 +875,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Empty corner cell
         const cornerCell = document.createElement('div');
         cornerCell.classList.add('cell', 'header-cell');
-        cornerCell.innerHTML = '<span>Student</span>';
+        cornerCell.innerHTML = '<span>Élève</span>';
         trackingHeader.appendChild(cornerCell);
         
         // Add activity column headers (pairs of Activity and Status)
@@ -883,13 +883,13 @@ document.addEventListener('DOMContentLoaded', function() {
             // Activity column header
             const activityHeader = document.createElement('div');
             activityHeader.classList.add('cell', 'header-cell', 'activity-column-header');
-            activityHeader.innerHTML = `<span>Activity ${i}</span>`;
+            activityHeader.innerHTML = `<span>Activité ${i}</span>`;
             trackingHeader.appendChild(activityHeader);
             
             // Status column header
             const statusHeader = document.createElement('div');
             statusHeader.classList.add('cell', 'header-cell', 'status-column-header');
-            statusHeader.innerHTML = `<span>Status</span>`;
+            statusHeader.innerHTML = `<span>État</span>`;
             trackingHeader.appendChild(statusHeader);
             
             // Add a divider after each activity-status pair (except the last one)
@@ -903,7 +903,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Add "Add Column" header for adding more activity slots
         const addActivityHeader = document.createElement('div');
         addActivityHeader.classList.add('cell', 'header-cell', 'add-column-button');
-        addActivityHeader.textContent = '+ Add Activity Slot';
+        addActivityHeader.textContent = '+ Ajouter Colonne d\'Activité';
         addActivityHeader.addEventListener('click', function() {
             // For each student, add a new activity slot
             students.forEach(student => {
@@ -965,7 +965,7 @@ document.addEventListener('DOMContentLoaded', function() {
             nameCell.addEventListener('click', function(e) {
                 // Don't trigger on delete icon click
                 if (e.target.classList.contains('delete-icon')) {
-                    if (confirm(`Delete student "${student.name}"?`)) {
+                    if (confirm(`Supprimer l'élève "${student.name}" ?`)) {
                         deleteStudent(studentId);
                     }
                     return;
@@ -1004,7 +1004,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Add a remove option
                     const removeOption = document.createElement('option');
                     removeOption.value = 'remove';
-                    removeOption.textContent = '-- Remove Activity --';
+                    removeOption.textContent = '-- Supprimer Activité --';
                     activitySelect.appendChild(removeOption);
                     
                     // Add all activities as options
@@ -1028,7 +1028,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Add a "New Activity" option at the bottom
                     const addNewOption = document.createElement('option');
                     addNewOption.value = 'new';
-                    addNewOption.textContent = '+ Add New Activity';
+                    addNewOption.textContent = '+ Ajouter Nouvelle Activité';
                     addNewOption.classList.add('add-activity-option');
                     activitySelect.appendChild(addNewOption);
                     
@@ -1061,12 +1061,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Empty slot - show button to assign an activity
                     const assignButton = document.createElement('button');
                     assignButton.classList.add('assign-activity-button');
-                    assignButton.textContent = '+ Assign Activity';
+                    assignButton.textContent = '+ Assigner Activité';
                     
                     assignButton.addEventListener('click', function() {
                         // Show activity selection UI
                         if (activities.length === 0) {
-                            alert('Please create some activities first');
+                            alert('Veuillez d\'abord créer quelques activités');
                             return;
                         }
                         
@@ -1084,7 +1084,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         // Add a "New Activity" option at the bottom
                         const addNewOption = document.createElement('option');
                         addNewOption.value = 'new';
-                        addNewOption.textContent = '+ Add New Activity';
+                        addNewOption.textContent = '+ Ajouter Nouvelle Activité';
                         addNewOption.classList.add('add-activity-option');
                         select.appendChild(addNewOption);
                         
@@ -1154,10 +1154,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     
                     // Add status options
                     const statuses = [
-                        { value: 'not-started', text: 'Not Started' },
-                        { value: 'in-progress', text: 'In Progress' },
-                        { value: 'completed', text: 'Completed' },
-                        { value: 'validated', text: 'Validated' }
+                        { value: 'not-started', text: 'Pas commencé' },
+                        { value: 'in-progress', text: 'En cours' },
+                        { value: 'completed', text: 'Terminé' },
+                        { value: 'validated', text: 'Validé' }
                     ];
                     
                     statuses.forEach(statusOption => {
@@ -1259,7 +1259,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add a new student
     function addStudent(name) {
         if (!name || name.trim() === '') {
-            alert('Please enter a valid name');
+            alert('Veuillez entrer un nom valide');
             return;
         }
         
@@ -1302,7 +1302,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         // Show success message
-        alert(`Student "${name}" has been added successfully!`);
+        alert(`L'élève "${name}" a été ajouté avec succès !`);
         
         // Ensure we stay on the teacher screen if that's where we started
         if (teacherScreen.style.display === 'flex') {
@@ -1482,7 +1482,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             }
         } else {
-            alert('Incorrect passcode!');
+            alert('Mot de passe incorrect !');
             passcodeInput.value = '';
             passcodeInput.focus();
         }

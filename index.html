@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Classroom Activity Tracker</title>
+    <title>Suivi d'Activités de Classe</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/media-queries.css">
     <link rel="stylesheet" href="css/student-rows.css">
@@ -100,7 +100,7 @@
                     <table class="activities-table">
                         <thead>
                             <tr>
-                                <th>Image</th>
+                                <th>Icône</th>
                                 <th>Activité</th>
                                 <th>Actions</th>
                             </tr>
@@ -118,7 +118,7 @@
     <div id="activity-modal" class="modal">
         <div class="modal-content">
             <span class="close-modal">&times;</span>
-            <h2>Add Activity</h2>
+            <h2>Ajouter une Activité</h2>
             <div class="modal-form">
                 <div class="form-group">
                     <label for="activity-name">Nom de l'activité :</label>
@@ -128,7 +128,7 @@
                     <label>Choisissez un type d'icône :</label>
                     <div class="icon-type-selector">
                         <button type="button" id="emoji-tab-button" class="icon-tab-button active">Emoji</button>
-                        <button type="button" id="image-tab-button" class="icon-tab-button">Image Upload</button>
+                        <button type="button" id="image-tab-button" class="icon-tab-button">Télécharger Image</button>
                     </div>
                     
                     <div id="emoji-tab-content" class="icon-tab-content active">
@@ -173,8 +173,8 @@
                     </div>
                 </div>
                 <div class="form-actions">
-                    <button id="save-activity" class="btn-primary">Save Activity</button>
-                    <button class="close-modal-btn btn-secondary">Cancel</button>
+                    <button id="save-activity" class="btn-primary">Sauvegarder l'Activité</button>
+                    <button class="close-modal-btn btn-secondary">Annuler</button>
                 </div>
             </div>
         </div>
@@ -212,7 +212,7 @@
                     // Get the values
                     const name = nameInput.value.trim();
                     if (!name) {
-                        alert('Please enter an activity name');
+                        alert('Veuillez entrer un nom d\'activité');
                         return;
                     }
                     
