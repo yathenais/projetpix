@@ -22,7 +22,7 @@
     
     <!-- Student Name Selection Screen -->
     <div id="student-select-screen" class="screen">
-        <h1>Select Your Name</h1>
+        <h1>Quel est ton nom ?</h1>
         <div id="student-list" class="selection-list">
             <!-- Student names will be populated from JavaScript -->
         </div>
@@ -35,7 +35,7 @@
                 <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
             </svg>
         </button>
-        <h1>Your Activities Today</h1>
+        <h1>Tes activités du jour</h1>
         <h2 id="student-name-display"></h2>
         <div id="student-activities-list" class="activities-list">
             <!-- Activities will be populated from JavaScript -->
@@ -49,10 +49,10 @@
                 <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
             </svg>
         </button>
-        <h1>Teacher Access</h1>
+        <h1>Accès Enseignant</h1>
         <div class="passcode-container">
-            <input type="password" id="passcode-input" placeholder="Enter passcode" maxlength="4">
-            <button id="submit-passcode">Enter</button>
+            <input type="password" id="passcode-input" placeholder="Mot de passe" maxlength="4">
+            <button id="submit-passcode">Entrer</button>
         </div>
     </div>
     
@@ -63,20 +63,21 @@
                 <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
             </svg>
         </button>
-        <h1>Classroom Management</h1>
+        <h1>Gestion de la classe</h1>
         
         <!-- Tab navigation -->
         <div class="tab-navigation">
-            <button class="tab-button active" data-tab="tracking-tab">Tracking</button>
-            <button class="tab-button" data-tab="activities-tab">Activities</button>
+            <button class="tab-button active" data-tab="tracking-tab">Suivi</button>
+            <button class="tab-button" data-tab="activities-tab">Activités</button>
         </div>
         
         <!-- Tracking Tab Content -->
         <div id="tracking-tab" class="tab-content active">
             <!-- Direct Add Student button before the grid -->
             <div class="top-action-bar">
-                <button id="add-student-button" onclick="window.addStudentDirectly()" class="add-student-button-top">+ ADD STUDENT</button>
-                <button id="reset-data-button" class="reset-data-button">RESET DATA</button>
+                <button id="add-student-button" onclick="window.addStudentDirectly()" class="add-student-button-top">+ Ajouter un élève</button>
+                <button id="save-data-button" class="save-data-button">💾 Sauvegarder</button>
+                <button id="reset-data-button" class="reset-data-button">Réinitialiser les données</button>
             </div>
             
             <div class="spreadsheet-container full-width" id="tracking-container">
@@ -93,14 +94,14 @@
         <div id="activities-tab" class="tab-content">
             <div class="activities-management">
                 <div class="top-action-bar">
-                    <button id="add-activity-button" class="add-activity-button">+ ADD ACTIVITY</button>
+                    <button id="add-activity-button" class="add-activity-button">+ Ajouter une activité</button>
                 </div>
                 <div class="activities-list-container">
                     <table class="activities-table">
                         <thead>
                             <tr>
-                                <th>Emoji</th>
-                                <th>Activity Name</th>
+                                <th>Image</th>
+                                <th>Activité</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -120,11 +121,11 @@
             <h2>Add Activity</h2>
             <div class="modal-form">
                 <div class="form-group">
-                    <label for="activity-name">Activity Name:</label>
-                    <input type="text" id="activity-name" placeholder="Enter activity name">
+                    <label for="activity-name">Nom de l'activité :</label>
+                    <input type="text" id="activity-name" placeholder="Entrez le nom de l'activité">
                 </div>
                 <div class="form-group">
-                    <label>Choose an Icon Type:</label>
+                    <label>Choisissez un type d'icône :</label>
                     <div class="icon-type-selector">
                         <button type="button" id="emoji-tab-button" class="icon-tab-button active">Emoji</button>
                         <button type="button" id="image-tab-button" class="icon-tab-button">Image Upload</button>
@@ -158,14 +159,14 @@
                         <div class="image-upload-container">
                             <div class="image-preview-container">
                                 <img id="image-preview" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMjQgMjQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2NjY2NjYyIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxyZWN0IHg9IjMiIHk9IjMiIHdpZHRoPSIxOCIgaGVpZ2h0PSIxOCIgcng9IjIiIHJ5PSIyIj48L3JlY3Q+PGNpcmNsZSBjeD0iOC41IiBjeT0iOC41IiByPSIxLjUiPjwvY2lyY2xlPjxwb2x5bGluZSBwb2ludHM9IjIxIDE1IDEwIDIxIDMgMTUiPjwvcG9seWxpbmU+PC9zdmc+" alt="Preview">
-                                <div class="no-image-message">No image selected</div>
+                                <div class="no-image-message">Aucune image sélectionnée</div>
                             </div>
                             <div class="image-upload-actions">
                                 <label for="image-upload" class="custom-file-upload">
-                                    Choose Image
+                                    Choisir une image
                                 </label>
                                 <input type="file" id="image-upload" accept="image/*">
-                                <button id="remove-image" class="btn-secondary" disabled>Remove</button>
+                                <button id="remove-image" class="btn-secondary" disabled>Supprimer</button>
                             </div>
                             <input type="hidden" id="image-data" value="">
                         </div>

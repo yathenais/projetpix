@@ -109,22 +109,39 @@ document.addEventListener('DOMContentLoaded', function() {
         const resetDataButton = document.getElementById('reset-data-button');
         if (resetDataButton) {
             resetDataButton.addEventListener('click', function() {
-                if (confirm('This will reset all data to sample data. Continue?')) {
-                    // Clear localStorage
-                    localStorage.removeItem('students');
-                    localStorage.removeItem('activities');
-                    localStorage.removeItem('tracking');
+                if (confirm('This will reset all activity assignments and their status. Students and activities will be preserved. Continue?')) {
+                    // Only reset the tracking data (activity assignments and status)
+                    resetActivityAssignments();
                     
-                    // Reset in-memory data
-                    students = [];
-                    activities = [];
-                    tracking = {};
-                    
-                    // Add sample data
-                    addSampleData();
-                    
-                    alert('Data has been reset to sample data.');
+                    alert('Activity assignments and status have been reset. You can now reassign activities from scratch.');
                 }
+            });
+        }
+        
+        // Setup the save data button
+        const saveDataButton = document.getElementById('save-data-button');
+        if (saveDataButton) {
+            saveDataButton.addEventListener('click', function() {
+                // Force save data
+                saveData();
+                
+                // Provide visual feedback
+                const originalText = saveDataButton.innerHTML;
+                const originalClass = saveDataButton.className;
+                
+                // Change button appearance temporarily
+                saveDataButton.innerHTML = '✅ Sauvegardé !';
+                saveDataButton.className = originalClass + ' save-success';
+                saveDataButton.disabled = true;
+                
+                // Reset button after 2 seconds
+                setTimeout(() => {
+                    saveDataButton.innerHTML = originalText;
+                    saveDataButton.className = originalClass;
+                    saveDataButton.disabled = false;
+                }, 2000);
+                
+                console.log('Manual save completed successfully');
             });
         }
         
@@ -176,6 +193,26 @@ document.addEventListener('DOMContentLoaded', function() {
             saveData();
             console.log("Data migration complete.");
         }
+    }
+    
+    // Reset only the tracking data (activity assignments and status)
+    function resetActivityAssignments() {
+        // Reset tracking to empty object
+        tracking = {};
+        
+        // Initialize empty tracking for all existing students
+        students.forEach(student => {
+            const studentId = parseInt(student.id);
+            tracking[studentId] = {};
+        });
+        
+        // Save to localStorage (only tracking is updated)
+        saveData();
+        
+        // Re-render the tracking table
+        renderTrackingTable();
+        
+        console.log('Activity assignments reset. Students and activities preserved.');
     }
     
     // Add some sample data for testing

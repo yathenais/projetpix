@@ -795,6 +795,37 @@ button:hover {
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
 }
 
+.save-data-button {
+    background-color: #3498db;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-left: 10px;
+    transition: all 0.3s ease;
+}
+
+.save-data-button:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+}
+
+.save-data-button.save-success {
+    background-color: #27ae60;
+    transform: translateY(-2px);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+    animation: pulse 0.5s ease-in-out;
+}
+
+@keyframes pulse {
+    0% { transform: translateY(-2px) scale(1); }
+    50% { transform: translateY(-2px) scale(1.05); }
+    100% { transform: translateY(-2px) scale(1); }
+}
+
 .add-column-button {
     background-color: #f0f7ff;
     border: 1px dashed #3498db;
