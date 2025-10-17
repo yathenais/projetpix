@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Police EcritureA-Romain</title>
+    <style>
+        @font-face {
+            font-family: 'EcritureA-Romain';
+            src: url('assets/EcritureA-Romain.otf') format('opentype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 40px;
+            background-color: #f5f5f5;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .font-test {
+            margin: 20px 0;
+            padding: 20px;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+        }
+        
+        .standard-font {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .custom-font {
+            font-family: 'EcritureA-Romain', 'Brush Script MT', cursive;
+        }
+        
+        .title-large {
+            font-size: 38px;
+            margin: 10px 0;
+            letter-spacing: 2px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        
+        .name-medium {
+            font-size: 18px;
+            margin: 10px 0;
+            letter-spacing: 1px;
+            text-shadow: 0.5px 0.5px 1px rgba(0, 0, 0, 0.1);
+        }
+        
+        .activity-small {
+            font-size: 16px;
+            margin: 10px 0;
+            letter-spacing: 1px;
+            text-shadow: 0.5px 0.5px 1px rgba(0, 0, 0, 0.1);
+            line-height: 1.4;
+        }
+        
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .before, .after {
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        .before {
+            background: #f8f9fa;
+            border-left: 4px solid #6c757d;
+        }
+        
+        .after {
+            background: #e8f4fd;
+            border-left: 4px solid #3498db;
+        }
+        
+        .status {
+            padding: 10px;
+            margin: 20px 0;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .status.loading {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Test de la Police EcritureA-Romain</h1>
+        
+        <div id="font-status" class="status loading">
+            Chargement de la police personnalisée...
+        </div>
+        
+        <h2>Comparaison Avant/Après</h2>
+        
+        <!-- Test des titres principaux -->
+        <div class="font-test">
+            <h3>Titres principaux (38px)</h3>
+            <div class="comparison">
+                <div class="before">
+                    <h4>AVANT (Police système)</h4>
+                    <div class="title-large standard-font">Quel est ton nom ?</div>
+                    <div class="title-large standard-font">Tes activités du jour</div>
+                </div>
+                <div class="after">
+                    <h4>APRÈS (EcritureA-Romain)</h4>
+                    <div class="title-large custom-font">Quel est ton nom ?</div>
+                    <div class="title-large custom-font">Tes activités du jour</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Test des noms d'élèves -->
+        <div class="font-test">
+            <h3>Noms dans les cartes élèves (18px)</h3>
+            <div class="comparison">
+                <div class="before">
+                    <h4>AVANT</h4>
+                    <div class="name-medium standard-font">Emma</div>
+                    <div class="name-medium standard-font">Liam</div>
+                    <div class="name-medium standard-font">Olivia</div>
+                </div>
+                <div class="after">
+                    <h4>APRÈS</h4>
+                    <div class="name-medium custom-font">Emma</div>
+                    <div class="name-medium custom-font">Liam</div>
+                    <div class="name-medium custom-font">Olivia</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Test des noms d'activités -->
+        <div class="font-test">
+            <h3>Noms dans les cartes activités (16px)</h3>
+            <div class="comparison">
+                <div class="before">
+                    <h4>AVANT</h4>
+                    <div class="activity-small standard-font">Lecture</div>
+                    <div class="activity-small standard-font">Mathématiques</div>
+                    <div class="activity-small standard-font">Arts plastiques</div>
+                    <div class="activity-small standard-font">Sciences naturelles</div>
+                </div>
+                <div class="after">
+                    <h4>APRÈS</h4>
+                    <div class="activity-small custom-font">Lecture</div>
+                    <div class="activity-small custom-font">Mathématiques</div>
+                    <div class="activity-small custom-font">Arts plastiques</div>
+                    <div class="activity-small custom-font">Sciences naturelles</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Test de l'alphabet -->
+        <div class="font-test">
+            <h3>Test de l'alphabet complet</h3>
+            <div class="comparison">
+                <div class="before">
+                    <h4>Police système</h4>
+                    <div class="name-medium standard-font">ABCDEFGHIJKLMNOPQRSTUVWXYZ</div>
+                    <div class="name-medium standard-font">abcdefghijklmnopqrstuvwxyz</div>
+                    <div class="name-medium standard-font">0123456789 !@#$%^&*()</div>
+                    <div class="name-medium standard-font">àáâäæçèéêëìíîïñòóôöùúûüÿ</div>
+                </div>
+                <div class="after">
+                    <h4>EcritureA-Romain</h4>
+                    <div class="name-medium custom-font">ABCDEFGHIJKLMNOPQRSTUVWXYZ</div>
+                    <div class="name-medium custom-font">abcdefghijklmnopqrstuvwxyz</div>
+                    <div class="name-medium custom-font">0123456789 !@#$%^&*()</div>
+                    <div class="name-medium custom-font">àáâäæçèéêëìíîïñòóôöùúûüÿ</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Test si la police est bien chargée
+        document.addEventListener('DOMContentLoaded', function() {
+            const statusElement = document.getElementById('font-status');
+            
+            // Fonction pour tester si la police est chargée
+            function testFontLoaded() {
+                // Créer un élément de test caché
+                const testElement = document.createElement('div');
+                testElement.style.position = 'absolute';
+                testElement.style.visibility = 'hidden';
+                testElement.style.fontSize = '100px';
+                testElement.style.fontFamily = 'EcritureA-Romain, serif';
+                testElement.textContent = 'Test';
+                document.body.appendChild(testElement);
+                
+                // Mesurer la largeur avec la police personnalisée
+                const customWidth = testElement.offsetWidth;
+                
+                // Changer pour une police de référence
+                testElement.style.fontFamily = 'serif';
+                const serifWidth = testElement.offsetWidth;
+                
+                // Nettoyer
+                document.body.removeChild(testElement);
+                
+                // Si les largeurs sont différentes, la police est chargée
+                return customWidth !== serifWidth;
+            }
+            
+            // Tester le chargement après un délai
+            setTimeout(() => {
+                if (testFontLoaded()) {
+                    statusElement.className = 'status success';
+                    statusElement.textContent = '✅ Police EcritureA-Romain chargée avec succès !';
+                } else {
+                    statusElement.className = 'status error';
+                    statusElement.textContent = '❌ Erreur : Police EcritureA-Romain non trouvée. Vérifiez le chemin du fichier.';
+                }
+            }, 1000);
+            
+            // Utiliser l'API moderne si disponible
+            if ('fonts' in document) {
+                document.fonts.ready.then(() => {
+                    const fontFace = new FontFace('EcritureA-Romain', 'url(assets/EcritureA-Romain.otf)');
+                    fontFace.load().then(() => {
+                        document.fonts.add(fontFace);
+                        statusElement.className = 'status success';
+                        statusElement.textContent = '✅ Police EcritureA-Romain chargée avec succès (API moderne) !';
+                    }).catch((error) => {
+                        console.error('Erreur de chargement de police:', error);
+                        statusElement.className = 'status error';
+                        statusElement.textContent = '❌ Erreur de chargement : ' + error.message;
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -29,6 +29,35 @@ document.addEventListener('DOMContentLoaded', function() {
     function initializeSettingsTab() {
         setupPasswordChangeHandlers();
         updatePasswordDisplay();
+        initializePreferences();
+    }
+    
+    // Preferences management
+    function initializePreferences() {
+        const cursiveFontToggle = document.getElementById('cursive-font-toggle');
+        
+        if (cursiveFontToggle) {
+            // Load saved preference
+            const isCursiveEnabled = localStorage.getItem('cursiveFontEnabled') === 'true';
+            cursiveFontToggle.checked = isCursiveEnabled;
+            applyCursiveFont(isCursiveEnabled);
+            
+            // Add event listener
+            cursiveFontToggle.addEventListener('change', function() {
+                const isEnabled = this.checked;
+                localStorage.setItem('cursiveFontEnabled', isEnabled.toString());
+                applyCursiveFont(isEnabled);
+            });
+        }
+    }
+    
+    function applyCursiveFont(isEnabled) {
+        const body = document.body;
+        if (isEnabled) {
+            body.classList.add('cursive-titles');
+        } else {
+            body.classList.remove('cursive-titles');
+        }
     }
     
     function updatePasswordDisplay() {
@@ -138,6 +167,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const backFromPasscodeButton = document.getElementById('back-from-passcode-button');
     const backToStudentButton = document.getElementById('back-to-student-button');
     const studentNameDisplay = document.getElementById('student-name-display');
+    const studentPhotoDisplay = document.getElementById('student-photo-display');
     const submitPasscodeButton = document.getElementById('submit-passcode');
     const passcodeInput = document.getElementById('passcode-input');
     
@@ -170,6 +200,9 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Migrate data to new format if needed
         migrateDataIfNeeded();
+        
+        // Initialize preferences (including cursive font)
+        initializePreferences();
         
         // Check if we have a saved screen state
         const savedScreen = localStorage.getItem('currentScreen');
@@ -528,8 +561,38 @@ document.addEventListener('DOMContentLoaded', function() {
         // Display student name
         studentNameDisplay.textContent = student.name;
         
+        // Display student photo
+        displayStudentPhoto(student);
+        
         // Render activities for this student
         renderStudentActivitiesList(student);
+    }
+    
+    // Display student photo in the profile section
+    function displayStudentPhoto(student) {
+        if (!studentPhotoDisplay) return;
+        
+        studentPhotoDisplay.innerHTML = '';
+        
+        if (student.photo) {
+            // If student has a photo, display it
+            const photoImg = document.createElement('img');
+            photoImg.src = student.photo;
+            photoImg.alt = `Photo de ${student.name}`;
+            photoImg.classList.add('student-photo');
+            studentPhotoDisplay.appendChild(photoImg);
+        } else {
+            // If no photo, display initials as placeholder
+            const initials = student.name
+                .split(' ')
+                .map(word => word.charAt(0).toUpperCase())
+                .join('');
+            
+            const placeholder = document.createElement('div');
+            placeholder.classList.add('student-photo-placeholder');
+            placeholder.textContent = initials;
+            studentPhotoDisplay.appendChild(placeholder);
+        }
     }
     
     // Render activities list for a specific student

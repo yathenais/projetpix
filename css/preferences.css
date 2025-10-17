@@ -1,0 +1,143 @@
+/* Import custom font */
+@font-face {
+    font-family: 'EcritureA-Romain';
+    src: url('../assets/EcritureA-Romain.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Toggle Switch Styles */
+.display-preferences {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.preference-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.preference-item:last-child {
+    border-bottom: none;
+}
+
+.preference-item label:first-child {
+    font-size: 16px;
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+.toggle-container {
+    position: relative;
+}
+
+.toggle-checkbox {
+    display: none;
+}
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 30px;
+    background-color: #ccc;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.toggle-slider {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 24px;
+    height: 24px;
+    background-color: white;
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.toggle-checkbox:checked + .toggle-switch {
+    background-color: #3498db;
+}
+
+.toggle-checkbox:checked + .toggle-switch .toggle-slider {
+    transform: translateX(30px);
+}
+
+.toggle-switch:hover {
+    box-shadow: 0 0 8px rgba(52, 152, 219, 0.3);
+}
+
+/* Cursive Font Styles */
+.cursive-font {
+    font-family: 'Brush Script MT', 'Lucida Handwriting', 'Segoe Print', cursive !important;
+}
+
+/* Apply custom font to specific elements when the class is added to body */
+body.cursive-titles h1,
+body.cursive-titles #student-name-display,
+body.cursive-titles .student-name-container,
+body.cursive-titles .activity-name {
+    font-family: 'EcritureA-Romain', 'Brush Script MT', 'Lucida Handwriting', 'Segoe Print', cursive !important;
+}
+
+/* Ensure cursive titles are still readable */
+body.cursive-titles h1 {
+    font-size: 38px !important;
+    letter-spacing: 2px !important;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1) !important;
+}
+
+body.cursive-titles .student-name-large {
+    font-size: 40px !important;
+    letter-spacing: 2px !important;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Cursive styling for student cards */
+body.cursive-titles .student-name-container {
+    font-size: 54px !important;
+    letter-spacing: 2px !important;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.15) !important;
+    line-height: 1.2 !important;
+}
+
+/* Cursive styling for activity cards */
+body.cursive-titles .activity-name {
+    font-size: 38px !important;
+    letter-spacing: 2px !important;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.15) !important;
+    line-height: 1.3 !important;
+}
+
+/* Animation for smooth font transition */
+h1, .student-name-large, #student-name-display, .student-name-container, .activity-name {
+    transition: font-family 0.3s ease, font-size 0.3s ease, letter-spacing 0.3s ease;
+}
+
+/* Settings section styling improvements */
+.settings-section {
+    margin-bottom: 30px;
+}
+
+.settings-section:last-child {
+    margin-bottom: 0;
+}
+
+.settings-section h3 {
+    color: #2c3e50;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #3498db;
+}

@@ -42,6 +42,27 @@
         width: 90px;
         height: 90px;
     }
+    
+    /* Student profile on mobile */
+    .student-profile-section {
+        margin: 15px 0 30px 0;
+        padding: 15px;
+    }
+    
+    .student-photo-container {
+        width: 100px;
+        height: 100px;
+        margin-bottom: 15px;
+        border-width: 3px;
+    }
+    
+    .student-photo-placeholder {
+        font-size: 40px;
+    }
+    
+    .student-name-large {
+        font-size: 28px !important;
+    }
 }
 
 /* Media Queries for Dashboard */

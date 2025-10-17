@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Suivi d'Activités de Classe</title>
+    <title>TRAME</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/media-queries.css">
     <link rel="stylesheet" href="css/student-rows.css">
@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="css/tabs.css">
     <link rel="stylesheet" href="css/activity-images.css">
     <link rel="stylesheet" href="css/student-photos.css">
+    <link rel="stylesheet" href="css/preferences.css">
 </head>
 <body>
     <!-- Lock button (available on student screens) -->
@@ -37,7 +38,12 @@
             </svg>
         </button>
         <h1>Tes activités du jour</h1>
-        <h2 id="student-name-display"></h2>
+        <div class="student-profile-section">
+            <div id="student-photo-display" class="student-photo-container">
+                <!-- Photo will be populated from JavaScript -->
+            </div>
+            <h2 id="student-name-display" class="student-name-large"></h2>
+        </div>
         <div id="student-activities-list" class="activities-list">
             <!-- Activities will be populated from JavaScript -->
         </div>
@@ -125,6 +131,21 @@
         
         <!-- Settings Tab Content -->
         <div id="settings-tab" class="tab-content">
+            <div class="settings-section">
+                <h3>Préférences d'affichage</h3>
+                <div class="display-preferences">
+                    <div class="preference-item">
+                        <label for="cursive-font-toggle">Police cursive pour les titres :</label>
+                        <div class="toggle-container">
+                            <input type="checkbox" id="cursive-font-toggle" class="toggle-checkbox">
+                            <label for="cursive-font-toggle" class="toggle-switch">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
             <div class="settings-section">
                 <h3>Gestion du mot de passe</h3>
                 <div class="password-management">
