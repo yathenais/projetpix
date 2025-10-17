@@ -1,5 +1,12 @@
 // Add the event listener for the edit activities button
 document.addEventListener('DOMContentLoaded', function() {
+    // Wait a bit to ensure script.js has loaded data first
+    setTimeout(() => {
+        initializeActivityList();
+    }, 200);
+});
+
+function initializeActivityList() {
     // Get activities from localStorage first
     let activities = [];
     try {
@@ -100,7 +107,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Render the activities table for the Activities tab
     renderActivitiesTable();
-});
+}
 
 // Render the activities table
 function renderActivitiesTable() {
@@ -110,10 +117,15 @@ function renderActivitiesTable() {
     // Clear existing content
     activitiesTableBody.innerHTML = '';
     
-    // Get activities from localStorage or global variable
+    // Get activities from localStorage and ensure we have the latest data
     let activities = [];
     try {
-        activities = JSON.parse(localStorage.getItem('activities')) || [];
+        const storageActivities = JSON.parse(localStorage.getItem('activities') || '[]');
+        const globalActivities = window.activities || [];
+        
+        // Use the most recent data (prefer global if it has more items or is more recent)
+        activities = storageActivities.length >= globalActivities.length ? storageActivities : globalActivities;
+        
     } catch (error) {
         console.error('Error loading activities from localStorage:', error);
         // Try to get activities from global scope if available
@@ -143,12 +155,20 @@ function renderActivitiesTable() {
         const iconCell = document.createElement('td');
         iconCell.classList.add('emoji-cell');
         
-        if (activity.imageData) {
+        if (activity.imageData && activity.imageData.trim() !== '') {
             // Create an image element if the activity has an image
             const imgElement = document.createElement('img');
             imgElement.src = activity.imageData;
             imgElement.alt = activity.name;
             imgElement.classList.add('table-activity-image');
+            
+            // Add error handling for image loading
+            imgElement.onerror = function() {
+                console.error('Failed to load image for activity:', activity.name);
+                // Fallback to emoji if image fails to load
+                iconCell.textContent = activity.emoji || '📝';
+            };
+            
             iconCell.appendChild(imgElement);
         } else {
             // Display emoji if available
@@ -167,10 +187,8 @@ function renderActivitiesTable() {
         // Edit button with pencil icon
         const editButton = document.createElement('button');
         editButton.classList.add('action-button', 'edit-button');
-        editButton.textContent = ''; // Clear any text content
-        editButton.innerHTML = '✏️'; // Set icon as HTML content
-        editButton.dataset.icon = 'edit'; // Add data attribute for icon type
-        editButton.title = 'Edit activity';
+        editButton.textContent = '✏️'; // Use textContent for emoji
+        editButton.title = 'Modifier l\'activité';
         editButton.addEventListener('click', function() {
             openActivityModal('edit', activity.id);
         });
@@ -178,12 +196,10 @@ function renderActivitiesTable() {
         // Delete button with red cross icon
         const deleteButton = document.createElement('button');
         deleteButton.classList.add('action-button', 'delete-button');
-        deleteButton.textContent = ''; // Clear any text content
-        deleteButton.innerHTML = '❌'; // Set icon as HTML content
-        deleteButton.dataset.icon = 'delete'; // Add data attribute for icon type
-        deleteButton.title = 'Delete activity';
+        deleteButton.textContent = '🗑️'; // Use textContent for emoji
+        deleteButton.title = 'Supprimer l\'activité';
         deleteButton.addEventListener('click', function() {
-            if (confirm(`Are you sure you want to delete "${activity.name}"?`)) {
+            if (confirm(`Êtes-vous sûr de vouloir supprimer "${activity.name}" ?`)) {
                 deleteActivity(activity.id);
             }
         });

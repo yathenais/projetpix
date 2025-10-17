@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="css/activity-list.css">
     <link rel="stylesheet" href="css/tabs.css">
     <link rel="stylesheet" href="css/activity-images.css">
+    <link rel="stylesheet" href="css/student-photos.css">
 </head>
 <body>
     <!-- Lock button (available on student screens) -->
@@ -51,8 +52,16 @@
         </button>
         <h1>Accès Enseignant</h1>
         <div class="passcode-container">
-            <input type="password" id="passcode-input" placeholder="Mot de passe" maxlength="4">
+            <input type="password" id="passcode-input" placeholder="Mot de passe" maxlength="10">
             <button id="submit-passcode">Entrer</button>
+            <div class="passcode-help">
+                <button id="show-recovery-info" class="recovery-help-btn">Mot de passe oublié ?</button>
+                <div id="recovery-info-display" class="recovery-info-box" style="display: none;">
+                    <p><strong>Code de récupération :</strong></p>
+                    <div class="recovery-code">ADMIN2025</div>
+                    <p>Utilisez ce code pour vous connecter et définir un nouveau mot de passe.</p>
+                </div>
+            </div>
         </div>
     </div>
     
@@ -69,6 +78,7 @@
         <div class="tab-navigation">
             <button class="tab-button active" data-tab="tracking-tab">Suivi</button>
             <button class="tab-button" data-tab="activities-tab">Activités</button>
+            <button class="tab-button" data-tab="settings-tab">Paramètres</button>
         </div>
         
         <!-- Tracking Tab Content -->
@@ -109,6 +119,47 @@
                             <!-- Will be populated by JavaScript -->
                         </tbody>
                     </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Settings Tab Content -->
+        <div id="settings-tab" class="tab-content">
+            <div class="settings-section">
+                <h3>Gestion du mot de passe</h3>
+                <div class="password-management">
+                    <div class="password-section">
+                        <h4>Changer le mot de passe</h4>
+                        <div class="form-group">
+                            <label for="current-password">Mot de passe actuel :</label>
+                            <input type="password" id="current-password" placeholder="Entrez le mot de passe actuel">
+                        </div>
+                        <div class="form-group">
+                            <label for="new-password">Nouveau mot de passe :</label>
+                            <input type="password" id="new-password" placeholder="Entrez le nouveau mot de passe">
+                        </div>
+                        <div class="form-group">
+                            <label for="confirm-password">Confirmer le nouveau mot de passe :</label>
+                            <input type="password" id="confirm-password" placeholder="Confirmez le nouveau mot de passe">
+                        </div>
+                        <button id="change-password-btn" class="btn-primary">Changer le mot de passe</button>
+                    </div>
+                    
+                    <div class="password-info-section">
+                        <h4>Information du mot de passe actuel</h4>
+                        <p>Mot de passe actuel : <span id="current-password-display">****</span> 
+                        <button id="toggle-password-visibility" class="btn-view">Afficher/Masquer</button></p>
+                    </div>
+                    
+                    <div class="recovery-section">
+                        <h4>Récupération du mot de passe</h4>
+                        <p>Si vous avez oublié votre mot de passe, utilisez le code de récupération principal :</p>
+                        <div class="recovery-info">
+                            <strong>Code de récupération : ADMIN2025</strong>
+                        </div>
+                        <p>Ce code peut être utilisé pour vous connecter et définir un nouveau mot de passe.</p>
+                        <button id="reset-to-default-btn" class="btn-secondary">Remettre le mot de passe par défaut (1234)</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -162,11 +213,14 @@
                                 <div class="no-image-message">Aucune image sélectionnée</div>
                             </div>
                             <div class="image-upload-actions">
-                                <label for="image-upload" class="custom-file-upload">
-                                    Choisir une image
-                                </label>
-                                <input type="file" id="image-upload" accept="image/*">
-                                <button id="remove-image" class="btn-secondary" disabled>Supprimer</button>
+                                <div class="custom-file-input">
+                                    <input type="file" id="image-upload" accept="image/*" style="display: none;">
+                                    <button type="button" class="file-input-label" onclick="document.getElementById('image-upload').click()">
+                                        📁 Parcourir les fichiers...
+                                    </button>
+                                </div>
+                                <div id="activity-file-name" class="file-name-display" style="display: none; margin-top: 8px; font-size: 12px; color: #666;"></div>
+                                <button id="remove-image" class="btn-secondary" disabled>Supprimer l'image</button>
                             </div>
                             <input type="hidden" id="image-data" value="">
                         </div>

@@ -18,11 +18,15 @@
 
 /* Table activity images */
 .table-activity-image {
-    max-width: 36px;
-    max-height: 36px;
-    object-fit: contain;
+    max-width: 48px;
+    max-height: 48px;
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
     display: block;
     margin: 0 auto;
+    border-radius: 6px;
+    border: 1px solid #ddd;
 }
 
 /* Ensure emoji-cell has proper dimensions for images */
@@ -30,16 +34,19 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 50px;
+    height: 60px;
+    width: 60px;
+    padding: 6px;
 }
 
 /* Style for the activities table */
 .activities-table .emoji-cell {
-    width: 60px;
-    height: 60px;
+    width: 70px;
+    height: 70px;
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 10px;
 }
 
 /* Ensure proper sizing in tracking grid */
@@ -56,6 +63,46 @@
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
+}
+
+/* Action buttons in activities table */
+.action-button {
+    background: none;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 6px 8px;
+    margin: 0 2px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    height: 32px;
+}
+
+.action-button:hover {
+    background-color: #f0f0f0;
+    border-color: #999;
+}
+
+.action-button.edit-button:hover {
+    background-color: #e6f2ff;
+    border-color: #007bff;
+}
+
+.action-button.delete-button:hover {
+    background-color: #ffe6e6;
+    border-color: #dc3545;
+}
+
+.actions-cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    padding: 8px;
 }
 
 /* Modal image preview enhancements */

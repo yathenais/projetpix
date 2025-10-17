@@ -77,7 +77,15 @@ imageTabButton.addEventListener('click', function() {
 // Handle image upload
 imageUploadInput.addEventListener('change', function(event) {
     const file = event.target.files[0];
+    const fileNameDisplay = document.getElementById('activity-file-name');
+    
     if (file) {
+        // Display file name
+        if (fileNameDisplay) {
+            fileNameDisplay.textContent = `Fichier sélectionné: ${file.name}`;
+            fileNameDisplay.style.display = 'block';
+        }
+        
         const reader = new FileReader();
         
         reader.onload = function(e) {
@@ -92,6 +100,11 @@ imageUploadInput.addEventListener('change', function(event) {
         };
         
         reader.readAsDataURL(file);
+    } else {
+        // Hide file name display if no file
+        if (fileNameDisplay) {
+            fileNameDisplay.style.display = 'none';
+        }
     }
 });
 
@@ -103,6 +116,12 @@ removeImageButton.addEventListener('click', function() {
     imagePreviewContainer.classList.remove('has-image');
     removeImageButton.disabled = true;
     imageUploadInput.value = '';
+    
+    // Hide file name display
+    const fileNameDisplay = document.getElementById('activity-file-name');
+    if (fileNameDisplay) {
+        fileNameDisplay.style.display = 'none';
+    }
 });
 
 // Close modal when close button is clicked
@@ -227,20 +246,18 @@ document.addEventListener('DOMContentLoaded', function() {
             // Save activities to localStorage
             localStorage.setItem('activities', JSON.stringify(activities));
             
+            // Update global activities reference
+            if (typeof window.activities !== 'undefined') {
+                window.activities = activities;
+            }
+            
             // Close modal
             activityModal.style.display = 'none';
             
-            // Refresh UI
-            if (typeof window.renderTrackingTable === 'function') {
-                window.renderTrackingTable();
-            }
-            
-            if (typeof window.renderActivitiesTable === 'function') {
-                window.renderActivitiesTable();
-            }
-            
-            // Force page reload to make sure everything is updated
-            location.reload();
+            // Give a tiny delay to let localStorage save, then reload
+            setTimeout(() => {
+                location.reload();
+            }, 100);
         });
     }
 });
@@ -270,6 +287,12 @@ function openActivityModal(operation = 'add', activityId = null, studentId = nul
     imagePreviewContainer.classList.remove('has-image');
     removeImageButton.disabled = true;
     imageUploadInput.value = '';
+    
+    // Hide file name display
+    const fileNameDisplay = document.getElementById('activity-file-name');
+    if (fileNameDisplay) {
+        fileNameDisplay.style.display = 'none';
+    }
     
     // Default to emoji tab
     emojiTabButton.classList.add('active');

@@ -2,6 +2,7 @@
     width: 100%;
     margin-bottom: 5px;
     border-bottom: 2px solid #e0e0e0;
+    overflow: visible;
 }
 
 .student-tracking-row:last-child {
@@ -19,10 +20,12 @@
     display: flex !important;
     flex-direction: column !important;
     width: 100% !important;
+    overflow: visible !important;
 }
 
 /* Ensure each row gets proper spacing */
 .spreadsheet-row {
     margin-bottom: 0 !important;
     border-bottom: none !important;
+    overflow: visible !important;
 }

@@ -24,8 +24,34 @@ window.refreshStudentList = function() {
     latestStudents.forEach(student => {
         const studentElement = document.createElement('div');
         studentElement.classList.add('student-item');
-        studentElement.textContent = student.name;
         studentElement.dataset.id = student.id;
+        
+        // Create photo container
+        const photoContainer = document.createElement('div');
+        photoContainer.classList.add('student-photo-container');
+        
+        if (student.photo) {
+            const photoImg = document.createElement('img');
+            photoImg.src = student.photo;
+            photoImg.alt = student.name;
+            photoImg.classList.add('student-photo');
+            photoContainer.appendChild(photoImg);
+        } else {
+            // Default avatar using first letter of name
+            const defaultAvatar = document.createElement('div');
+            defaultAvatar.classList.add('student-default-avatar');
+            defaultAvatar.textContent = student.name.charAt(0).toUpperCase();
+            photoContainer.appendChild(defaultAvatar);
+        }
+        
+        // Create name container
+        const nameContainer = document.createElement('div');
+        nameContainer.classList.add('student-name-container');
+        nameContainer.textContent = student.name;
+        
+        // Add photo and name to student element
+        studentElement.appendChild(photoContainer);
+        studentElement.appendChild(nameContainer);
         
         // Get showStudentActivities function from global scope if available
         if (typeof window.showStudentActivities === 'function') {

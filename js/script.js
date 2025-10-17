@@ -9,8 +9,128 @@ document.addEventListener('DOMContentLoaded', function() {
     window.activities = activities;
     window.tracking = tracking;
     
-    // Default passcode - in a real app this would be securely stored server-side
-    const TEACHER_PASSCODE = "1234";
+    // Password management system
+    const DEFAULT_PASSCODE = "1234";
+    const MASTER_RECOVERY_CODE = "ADMIN2025"; // Master code for password recovery
+    
+    function getTeacherPasscode() {
+        return localStorage.getItem('teacherPasscode') || DEFAULT_PASSCODE;
+    }
+    
+    function setTeacherPasscode(newPasscode) {
+        localStorage.setItem('teacherPasscode', newPasscode);
+    }
+    
+    function resetPasscodeToDefault() {
+        localStorage.removeItem('teacherPasscode');
+    }
+    
+    // Settings tab management
+    function initializeSettingsTab() {
+        setupPasswordChangeHandlers();
+        updatePasswordDisplay();
+    }
+    
+    function updatePasswordDisplay() {
+        const passwordDisplay = document.getElementById('current-password-display');
+        if (passwordDisplay) {
+            passwordDisplay.textContent = '****';
+            passwordDisplay.setAttribute('data-hidden', 'true');
+        }
+    }
+    
+    function setupPasswordChangeHandlers() {
+        // Change password functionality
+        const changePasswordBtn = document.getElementById('change-password-btn');
+        const resetToDefaultBtn = document.getElementById('reset-to-default-btn');
+        
+        if (changePasswordBtn) {
+            changePasswordBtn.addEventListener('click', function() {
+                const currentPasswordInput = document.getElementById('current-password');
+                const newPasswordInput = document.getElementById('new-password');
+                const confirmPasswordInput = document.getElementById('confirm-password');
+                
+                const currentPassword = currentPasswordInput.value;
+                const newPassword = newPasswordInput.value;
+                const confirmPassword = confirmPasswordInput.value;
+                
+                // Validation
+                if (!currentPassword || !newPassword || !confirmPassword) {
+                    alert('Veuillez remplir tous les champs.');
+                    return;
+                }
+                
+                // Check current password
+                if (currentPassword !== getTeacherPasscode() && currentPassword !== MASTER_RECOVERY_CODE) {
+                    alert('Le mot de passe actuel est incorrect.');
+                    return;
+                }
+                
+                // Check password confirmation
+                if (newPassword !== confirmPassword) {
+                    alert('La confirmation du mot de passe ne correspond pas.');
+                    return;
+                }
+                
+                // Check password length and complexity
+                if (newPassword.length < 4) {
+                    alert('Le mot de passe doit contenir au moins 4 caractères.');
+                    return;
+                }
+                
+                // Prevent using the master recovery code as regular password
+                if (newPassword === MASTER_RECOVERY_CODE) {
+                    alert('Vous ne pouvez pas utiliser le code de récupération comme mot de passe régulier.');
+                    return;
+                }
+                
+                // Warning for very simple passwords
+                if (newPassword === '1234' || newPassword === '0000' || newPassword === 'password') {
+                    if (!confirm('Ce mot de passe est très simple. Êtes-vous sûr de vouloir l\'utiliser ?')) {
+                        return;
+                    }
+                }
+                
+                // Save new password
+                setTeacherPasscode(newPassword);
+                
+                // Clear form
+                currentPasswordInput.value = '';
+                newPasswordInput.value = '';
+                confirmPasswordInput.value = '';
+                
+                alert('Mot de passe modifié avec succès !');
+            });
+        }
+        
+        if (resetToDefaultBtn) {
+            resetToDefaultBtn.addEventListener('click', function() {
+                if (confirm('Êtes-vous sûr de vouloir remettre le mot de passe par défaut (1234) ?')) {
+                    resetPasscodeToDefault();
+                    updatePasswordDisplay();
+                    alert('Mot de passe remis à la valeur par défaut : 1234');
+                }
+            });
+        }
+        
+        // Toggle password visibility
+        const togglePasswordBtn = document.getElementById('toggle-password-visibility');
+        if (togglePasswordBtn) {
+            togglePasswordBtn.addEventListener('click', function() {
+                const passwordDisplay = document.getElementById('current-password-display');
+                if (passwordDisplay) {
+                    const isHidden = passwordDisplay.getAttribute('data-hidden') === 'true';
+                    if (isHidden) {
+                        passwordDisplay.textContent = getTeacherPasscode();
+                        passwordDisplay.setAttribute('data-hidden', 'false');
+                    } else {
+                        passwordDisplay.textContent = '****';
+                        passwordDisplay.setAttribute('data-hidden', 'true');
+                    }
+                }
+            });
+        }
+    }
     
     // DOM Elements
     const lockButton = document.getElementById('lock-button');
@@ -219,10 +339,10 @@ document.addEventListener('DOMContentLoaded', function() {
     function addSampleData() {
         // Add sample students
         students = [
-            { id: 1, name: "Emma" },
-            { id: 2, name: "Liam" },
-            { id: 3, name: "Olivia" },
-            { id: 4, name: "Noah" }
+            { id: 1, name: "Emma", photo: null },
+            { id: 2, name: "Liam", photo: null },
+            { id: 3, name: "Olivia", photo: null },
+            { id: 4, name: "Noah", photo: null }
         ];
         
         // Add sample activities
@@ -362,8 +482,34 @@ document.addEventListener('DOMContentLoaded', function() {
         students.forEach(student => {
             const studentElement = document.createElement('div');
             studentElement.classList.add('student-item');
-            studentElement.textContent = student.name;
             studentElement.dataset.id = student.id;
+            
+            // Create photo container
+            const photoContainer = document.createElement('div');
+            photoContainer.classList.add('student-photo-container');
+            
+            if (student.photo) {
+                const photoImg = document.createElement('img');
+                photoImg.src = student.photo;
+                photoImg.alt = student.name;
+                photoImg.classList.add('student-photo');
+                photoContainer.appendChild(photoImg);
+            } else {
+                // Default avatar using first letter of name
+                const defaultAvatar = document.createElement('div');
+                defaultAvatar.classList.add('student-default-avatar');
+                defaultAvatar.textContent = student.name.charAt(0).toUpperCase();
+                photoContainer.appendChild(defaultAvatar);
+            }
+            
+            // Create name container
+            const nameContainer = document.createElement('div');
+            nameContainer.classList.add('student-name-container');
+            nameContainer.textContent = student.name;
+            
+            // Add photo and name to student element
+            studentElement.appendChild(photoContainer);
+            studentElement.appendChild(nameContainer);
             
             studentElement.addEventListener('click', function() {
                 showStudentActivities(student);
@@ -951,35 +1097,78 @@ document.addEventListener('DOMContentLoaded', function() {
             row.style.display = "grid";
             row.style.gridTemplateColumns = gridTemplateColumns;
             
-            // First cell is student name with delete option
+            // First cell is student name with simplified controls
             const nameCell = document.createElement('div');
             nameCell.classList.add('cell', 'header-cell', 'editable-cell');
             nameCell.innerHTML = `
-                <span>${student.name}</span>
-                <span class="delete-icon" data-type="student" data-id="${studentId}">×</span>
+                <div class="student-cell-content">
+                    <div class="student-info" data-student-id="${studentId}">
+                        ${student.photo ? 
+                            `<img src="${student.photo}" alt="${student.name}" class="student-mini-photo" />` : 
+                            `<div class="student-mini-avatar">${student.name.charAt(0).toUpperCase()}</div>`
+                        }
+                        <span class="student-name-editable" data-student-id="${studentId}">${student.name}</span>
+                    </div>
+                    <div class="student-actions">
+                        <div class="action-menu-container">
+                            <button class="action-menu-btn" data-student-id="${studentId}" title="Actions">⋯</button>
+                            <div class="action-menu" id="action-menu-${studentId}" style="display: none;">
+                                <button class="action-item photo-action" data-student-id="${studentId}">📷 Modifier photo</button>
+                                <button class="action-item delete-action" data-student-id="${studentId}" data-student-name="${student.name}">🗑️ Supprimer</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             `;
             nameCell.dataset.id = studentId;
             nameCell.dataset.type = 'student';
             
-            // Make student name editable
-            nameCell.addEventListener('click', function(e) {
-                // Don't trigger on delete icon click
-                if (e.target.classList.contains('delete-icon')) {
-                    if (confirm(`Supprimer l'élève "${student.name}" ?`)) {
-                        deleteStudent(studentId);
-                    }
-                    return;
-                }
-                
-                // Only allow editing the student name
-                makeEditable(this, student.name, function(newValue) {
-                    if (newValue && newValue.trim() !== '') {
-                        student.name = newValue.trim();
-                        saveData();
-                        renderTrackingTable();
-                        renderStudentList(); // Update student screen too
-                    }
+            // Add event listeners for action buttons
+            const actionMenuBtn = nameCell.querySelector('.action-menu-btn');
+            const photoActionBtn = nameCell.querySelector('.photo-action');
+            const deleteActionBtn = nameCell.querySelector('.delete-action');
+            
+            if (actionMenuBtn) {
+                actionMenuBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toggleStudentActionMenu(studentId);
                 });
+            }
+            
+            if (photoActionBtn) {
+                photoActionBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    editStudentPhoto(studentId);
+                });
+            }
+            
+            if (deleteActionBtn) {
+                deleteActionBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    confirmDeleteStudent(studentId, student.name);
+                });
+            }
+            
+            // Make student name editable when clicking specifically on the name
+            nameCell.addEventListener('click', function(e) {
+                // Only trigger editing when clicking on the student name span
+                if (e.target.classList.contains('student-name-editable')) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const nameSpan = e.target;
+                    makeEditable(nameSpan, student.name, function(newValue) {
+                        if (newValue && newValue.trim() !== '') {
+                            student.name = newValue.trim();
+                            saveData();
+                            renderTrackingTable();
+                            renderStudentList(); // Update student screen too
+                        }
+                    });
+                }
             });
             
             row.appendChild(nameCell);
@@ -1257,7 +1446,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Add a new student
-    function addStudent(name) {
+    function addStudent(name, photo = null) {
         if (!name || name.trim() === '') {
             alert('Veuillez entrer un nom valide');
             return;
@@ -1265,7 +1454,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Create a new student with a numeric ID
         const newId = students.length > 0 ? Math.max(...students.map(s => parseInt(s.id))) + 1 : 1;
-        const newStudent = { id: newId, name: name.trim() };
+        const newStudent = { id: newId, name: name.trim(), photo: photo };
         
         // Add to students array
         students.push(newStudent);
@@ -1420,6 +1609,22 @@ document.addEventListener('DOMContentLoaded', function() {
         toggleLockButtonVisibility();
     });
     
+    // Show/hide recovery information
+    const showRecoveryBtn = document.getElementById('show-recovery-info');
+    const recoveryInfoDisplay = document.getElementById('recovery-info-display');
+    
+    if (showRecoveryBtn && recoveryInfoDisplay) {
+        showRecoveryBtn.addEventListener('click', function() {
+            if (recoveryInfoDisplay.style.display === 'none') {
+                recoveryInfoDisplay.style.display = 'block';
+                showRecoveryBtn.textContent = 'Masquer l\'aide';
+            } else {
+                recoveryInfoDisplay.style.display = 'none';
+                showRecoveryBtn.textContent = 'Mot de passe oublié ?';
+            }
+        });
+    }
+    
     // Back button from teacher to student screen
     backToStudentButton.addEventListener('click', function() {
         // Clear saved screen state
@@ -1432,7 +1637,10 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Passcode submit
     submitPasscodeButton.addEventListener('click', function() {
-        if (passcodeInput.value === TEACHER_PASSCODE) {
+        const enteredPasscode = passcodeInput.value;
+        const currentPasscode = getTeacherPasscode();
+        
+        if (enteredPasscode === currentPasscode || enteredPasscode === MASTER_RECOVERY_CODE) {
             // Save the current screen state
             localStorage.setItem('currentScreen', 'teacher');
             
@@ -1512,6 +1720,9 @@ document.addEventListener('DOMContentLoaded', function() {
             } else if (tabToShow === 'tracking-tab') {
                 // Refresh tracking table when switching to tracking tab
                 renderTrackingTable();
+            } else if (tabToShow === 'settings-tab') {
+                // Initialize settings tab if needed
+                initializeSettingsTab();
             }
         });
     });
@@ -1528,46 +1739,444 @@ document.addEventListener('DOMContentLoaded', function() {
     window.activities = activities;
     window.tracking = tracking;
     
+    // Make internal functions globally accessible for action menus
+    window.deleteStudent = deleteStudent;
+    window.addStudent = addStudent;
+    
     // No need for this event listener anymore since we're using the onclick attribute
     // on the button element directly
 });
 
 // Make addStudent globally accessible for the direct button
 window.addStudentDirectly = function() {
-    const newStudentName = prompt('Enter new student name:');
-    if (newStudentName && newStudentName.trim() !== '') {
-        // Find the existing addStudent function and call it
-        if (typeof addStudent === 'function') {
-            // Add the student
-            addStudent(newStudentName.trim());
+    showAddStudentModal();
+};
+
+// Function to show modal for adding student with photo
+function showAddStudentModal() {
+    // Create modal HTML
+    const modalHTML = `
+        <div id="add-student-modal" class="photo-modal-overlay" style="display: flex;">
+            <div class="photo-modal-content">
+                <div class="photo-modal-header">
+                    <h3>Ajouter un nouvel élève</h3>
+                    <button class="photo-modal-close">&times;</button>
+                </div>
+                <div class="photo-modal-body">
+                    <div class="form-group">
+                        <label for="student-name-input">Nom de l'élève :</label>
+                        <input type="text" id="student-name-input" placeholder="Entrez le nom de l'élève" />
+                    </div>
+                    <div class="form-group">
+                        <label for="student-photo-input">Photo de l'élève :</label>
+                        <div class="custom-file-input">
+                            <input type="file" id="student-photo-input" accept="image/*" style="display: none;" />
+                            <button type="button" class="file-input-label" onclick="document.getElementById('student-photo-input').click()">
+                                📁 Parcourir les fichiers...
+                            </button>
+                        </div>
+                        <div id="photo-preview" class="photo-preview" style="display: none;">
+                            <img id="preview-image" src="" alt="Aperçu" />
+                        </div>
+                        <div id="add-file-name" class="file-name-display" style="display: none; margin-top: 8px; font-size: 12px; color: #666;"></div>
+                    </div>
+                </div>
+                <div class="photo-modal-footer">
+                    <button class="btn-secondary" onclick="closeAddStudentModal()">Annuler</button>
+                    <button class="btn-primary" onclick="confirmAddStudent()">Ajouter l'élève</button>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Add modal to body
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    
+    // Add event listeners
+    setupAddStudentModalEvents();
+}
+
+function setupAddStudentModalEvents() {
+    // Photo input change event
+    const photoInput = document.getElementById('student-photo-input');
+    const photoPreview = document.getElementById('photo-preview');
+    const previewImage = document.getElementById('preview-image');
+    const fileNameDisplay = document.getElementById('add-file-name');
+    
+    photoInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            // Display file name
+            if (fileNameDisplay) {
+                fileNameDisplay.textContent = `Fichier sélectionné: ${file.name}`;
+                fileNameDisplay.style.display = 'block';
+            }
             
-            // Refresh the page - localStorage will maintain the state
-            location.reload();
+            // Display preview
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                previewImage.src = e.target.result;
+                photoPreview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
         } else {
-            // Fallback implementation if the original function isn't accessible
-            // Get references to the screens
-            const teacherScreen = document.getElementById('teacher-screen');
-            const studentSelectScreen = document.getElementById('student-select-screen');
+            photoPreview.style.display = 'none';
+            if (fileNameDisplay) {
+                fileNameDisplay.style.display = 'none';
+            }
+        }
+    });
+    
+    // Close modal events
+    document.querySelector('.photo-modal-close').addEventListener('click', closeAddStudentModal);
+    document.getElementById('add-student-modal').addEventListener('click', function(e) {
+        if (e.target.id === 'add-student-modal') {
+            closeAddStudentModal();
+        }
+    });
+}
+
+function closeAddStudentModal() {
+    const modal = document.getElementById('add-student-modal');
+    if (modal) {
+        modal.remove();
+    }
+}
+
+function confirmAddStudent() {
+    const nameInput = document.getElementById('student-name-input');
+    const photoInput = document.getElementById('student-photo-input');
+    const previewImage = document.getElementById('preview-image');
+    
+    const studentName = nameInput.value.trim();
+    
+    if (!studentName) {
+        alert('Veuillez entrer un nom pour l\'élève');
+        return;
+    }
+    
+    // Get photo data if available
+    let photoData = null;
+    if (photoInput.files[0]) {
+        photoData = previewImage.src; // This contains the base64 data URL
+    }
+    
+    // Use global addStudent function if available, otherwise use fallback
+    if (typeof window.addStudent === 'function') {
+        window.addStudent(studentName, photoData);
+    } else {
+        // Fallback: add student manually
+        const students = window.students || [];
+        const tracking = window.tracking || {};
+        
+        const newId = students.length > 0 ? Math.max(...students.map(s => parseInt(s.id))) + 1 : 1;
+        const newStudent = { id: newId, name: studentName, photo: photoData };
+        
+        students.push(newStudent);
+        tracking[newId] = {};
+        
+        // Update global arrays
+        window.students = students;
+        window.tracking = tracking;
+        
+        // Save to localStorage
+        localStorage.setItem('students', JSON.stringify(students));
+        localStorage.setItem('tracking', JSON.stringify(tracking));
+    }
+    
+    // Close modal and refresh
+    closeAddStudentModal();
+    location.reload();
+}
+
+// Function to edit student photo
+function editStudentPhoto(studentId) {
+    // Reload data from localStorage to ensure we have the latest
+    const studentsFromStorage = JSON.parse(localStorage.getItem('students') || '[]');
+    const students = window.students && window.students.length > 0 ? window.students : studentsFromStorage;
+    
+    const student = students.find(s => parseInt(s.id) === parseInt(studentId));
+    
+    if (!student) {
+        console.error('Student not found for ID:', studentId);
+        return;
+    }
+    
+    // Create modal HTML for photo editing
+    const modalHTML = `
+        <div id="edit-photo-modal" class="photo-modal-overlay" style="display: flex;">
+            <div class="photo-modal-content">
+                <div class="photo-modal-header">
+                    <h3>Modifier la photo de ${student.name}</h3>
+                    <button class="photo-modal-close">&times;</button>
+                </div>
+                <div class="photo-modal-body">
+                    <div class="form-group">
+                        <label>Photo actuelle :</label>
+                        <div class="current-photo-display">
+                            ${student.photo ? 
+                                `<img src="${student.photo}" alt="${student.name}" class="current-photo" />` : 
+                                '<div class="no-photo-placeholder">Aucune photo</div>'
+                            }
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-photo-input">Choisir une nouvelle photo :</label>
+                        <div class="custom-file-input">
+                            <input type="file" id="edit-photo-input" accept="image/*" style="display: none;" />
+                            <button type="button" class="file-input-label" onclick="document.getElementById('edit-photo-input').click()">
+                                📁 Parcourir les fichiers...
+                            </button>
+                        </div>
+                        <div id="edit-photo-preview" class="photo-preview" style="display: none;">
+                            <img id="edit-preview-image" src="" alt="Aperçu" />
+                        </div>
+                        <div id="edit-file-name" class="file-name-display" style="display: none; margin-top: 8px; font-size: 12px; color: #666;"></div>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn-secondary remove-photo-btn" data-student-id="${studentId}">Supprimer la photo</button>
+                    </div>
+                </div>
+                <div class="photo-modal-footer">
+                    <button class="btn-secondary modal-cancel-btn">Annuler</button>
+                    <button class="btn-primary modal-save-btn" data-student-id="${studentId}">Sauvegarder</button>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Add modal to body
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    
+    // Setup event listeners
+    setupEditPhotoModalEvents();
+}
+
+function setupEditPhotoModalEvents() {
+    // Photo input change event
+    const photoInput = document.getElementById('edit-photo-input');
+    const photoPreview = document.getElementById('edit-photo-preview');
+    const previewImage = document.getElementById('edit-preview-image');
+    const fileNameDisplay = document.getElementById('edit-file-name');
+    
+    photoInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            // Display file name
+            if (fileNameDisplay) {
+                fileNameDisplay.textContent = `Fichier sélectionné: ${file.name}`;
+                fileNameDisplay.style.display = 'block';
+            }
             
-            // Store current screen state
-            const wasOnTeacherScreen = teacherScreen && teacherScreen.style.display === 'flex';
+            // Display preview
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                previewImage.src = e.target.result;
+                photoPreview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        } else {
+            photoPreview.style.display = 'none';
+            if (fileNameDisplay) {
+                fileNameDisplay.style.display = 'none';
+            }
+        }
+    });
+    
+    // Close modal events
+    document.querySelector('#edit-photo-modal .photo-modal-close').addEventListener('click', closeEditPhotoModal);
+    document.getElementById('edit-photo-modal').addEventListener('click', function(e) {
+        if (e.target.id === 'edit-photo-modal') {
+            closeEditPhotoModal();
+        }
+    });
+    
+    // Modal button events
+    const cancelBtn = document.querySelector('#edit-photo-modal .modal-cancel-btn');
+    const saveBtn = document.querySelector('#edit-photo-modal .modal-save-btn');
+    const removeBtn = document.querySelector('#edit-photo-modal .remove-photo-btn');
+    
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            closeEditPhotoModal();
+        });
+    }
+    
+    if (saveBtn) {
+        saveBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const studentId = this.dataset.studentId;
+            console.log('Save button clicked for student ID:', studentId);
+            confirmEditPhoto(studentId);
+        });
+    }
+    
+    if (removeBtn) {
+        removeBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const studentId = this.dataset.studentId;
+            console.log('Remove button clicked for student ID:', studentId);
+            removeStudentPhoto(studentId);
+        });
+    }
+}
+
+function closeEditPhotoModal() {
+    const modal = document.getElementById('edit-photo-modal');
+    if (modal) {
+        modal.remove();
+    }
+}
+
+function confirmEditPhoto(studentId) {
+    const photoInput = document.getElementById('edit-photo-input');
+    const previewImage = document.getElementById('edit-preview-image');
+    
+    // Update student photo if new one was selected
+    if (photoInput && photoInput.files[0]) {
+        // Reload data from localStorage to ensure we have the latest
+        const studentsFromStorage = JSON.parse(localStorage.getItem('students') || '[]');
+        const students = window.students && window.students.length > 0 ? window.students : studentsFromStorage;
+        
+        const student = students.find(s => parseInt(s.id) === parseInt(studentId));
+        
+        if (student) {
+            student.photo = previewImage.src; // This contains the base64 data URL
             
-            let students = JSON.parse(localStorage.getItem('students') || '[]');
-            let tracking = JSON.parse(localStorage.getItem('tracking') || '{}');
-            
-            const newId = students.length > 0 ? Math.max(...students.map(s => s.id)) + 1 : 1;
-            const newStudent = { id: newId, name: newStudentName.trim() };
-            students.push(newStudent);
-            
-            // Initialize tracking for this student
-            tracking[newId] = {};
-            
-            // Save data
+            // Update global array and save
+            window.students = students;
             localStorage.setItem('students', JSON.stringify(students));
-            localStorage.setItem('tracking', JSON.stringify(tracking));
             
-            // Simple page refresh - will maintain state based on localStorage
-            location.reload();
+            // Refresh displays
+            if (typeof window.renderStudentList === 'function') {
+                window.renderStudentList();
+            }
+            if (typeof window.renderTrackingTable === 'function') {
+                window.renderTrackingTable();
+            }
         }
     }
-};
+    
+    // Close modal
+    closeEditPhotoModal();
+}
+
+function removeStudentPhoto(studentId) {
+    if (confirm('Êtes-vous sûr de vouloir supprimer la photo de cet élève ?')) {
+        // Use global students array
+        const students = window.students || [];
+        const student = students.find(s => parseInt(s.id) === parseInt(studentId));
+        if (student) {
+            student.photo = null;
+            
+            // Update global array and save
+            window.students = students;
+            localStorage.setItem('students', JSON.stringify(students));
+            
+            closeEditPhotoModal();
+            
+            // Refresh displays
+            if (typeof window.renderStudentList === 'function') {
+                window.renderStudentList();
+            }
+            if (typeof window.renderTrackingTable === 'function') {
+                window.renderTrackingTable();
+            }
+        }
+    }
+}
+
+// Function to toggle student action menu
+function toggleStudentActionMenu(studentId) {
+    // Close all other menus first
+    document.querySelectorAll('.action-menu').forEach(menu => {
+        if (menu.id !== `action-menu-${studentId}`) {
+            menu.style.display = 'none';
+        }
+    });
+    
+    // Toggle the selected menu
+    const menu = document.getElementById(`action-menu-${studentId}`);
+    if (menu) {
+        if (menu.style.display === 'none') {
+            menu.style.display = 'block';
+            
+            // Check if menu would be cut off at bottom and adjust position
+            const menuRect = menu.getBoundingClientRect();
+            const viewportHeight = window.innerHeight;
+            
+            if (menuRect.bottom > viewportHeight - 20) {
+                menu.style.top = 'auto';
+                menu.style.bottom = '100%';
+                menu.style.marginTop = '0';
+                menu.style.marginBottom = '2px';
+            } else {
+                menu.style.top = '100%';
+                menu.style.bottom = 'auto';
+                menu.style.marginTop = '2px';
+                menu.style.marginBottom = '0';
+            }
+        } else {
+            menu.style.display = 'none';
+        }
+    }
+}
+
+// Function to confirm student deletion
+function confirmDeleteStudent(studentId, studentName) {
+    if (confirm(`Supprimer l'élève "${studentName}" ?`)) {
+        // Try to call the internal deleteStudent function first
+        if (typeof window.deleteStudent === 'function') {
+            window.deleteStudent(studentId);
+        } else {
+            // Fallback: delete student manually
+            studentId = parseInt(studentId);
+            
+            // Access global arrays
+            if (window.students && window.tracking) {
+                window.students = window.students.filter(s => parseInt(s.id) !== studentId);
+                delete window.tracking[studentId];
+                
+                // Save to localStorage
+                localStorage.setItem('students', JSON.stringify(window.students));
+                localStorage.setItem('tracking', JSON.stringify(window.tracking));
+                
+                // Refresh displays
+                if (typeof window.renderStudentList === 'function') {
+                    window.renderStudentList();
+                }
+                if (typeof window.renderTrackingTable === 'function') {
+                    window.renderTrackingTable();
+                }
+                
+                // Refresh the page as last resort
+                location.reload();
+            }
+        }
+    }
+    // Close the menu
+    const menu = document.getElementById(`action-menu-${studentId}`);
+    if (menu) {
+        menu.style.display = 'none';
+    }
+}
+
+// Close action menus when clicking outside
+document.addEventListener('click', function(e) {
+    if (!e.target.closest('.action-menu-container')) {
+        document.querySelectorAll('.action-menu').forEach(menu => {
+            menu.style.display = 'none';
+        });
+    }
+});
+
+// Make functions globally accessible
+window.toggleStudentActionMenu = toggleStudentActionMenu;
+window.confirmDeleteStudent = confirmDeleteStudent;
+window.editStudentPhoto = editStudentPhoto;
+window.closeEditPhotoModal = closeEditPhotoModal;
+window.confirmEditPhoto = confirmEditPhoto;
+window.removeStudentPhoto = removeStudentPhoto;
+window.closeAddStudentModal = closeAddStudentModal;
+window.confirmAddStudent = confirmAddStudent;
