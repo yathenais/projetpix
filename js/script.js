@@ -198,6 +198,9 @@ document.addEventListener('DOMContentLoaded', function() {
         // Load data from localStorage
         loadData();
         
+        // Migrate default activities to French if needed
+        migrateActivitiesToFrench();
+        
         // Migrate data to new format if needed
         migrateDataIfNeeded();
         
@@ -459,6 +462,39 @@ document.addEventListener('DOMContentLoaded', function() {
         } catch (error) {
             console.error('Error loading data:', error);
             return { students: [], activities: [], tracking: {} };
+        }
+    }
+
+    // Migrate default activities to French
+    function migrateActivitiesToFrench() {
+        const frenchActivities = [
+            { id: 1, name: "Lecture", emoji: "📚" },
+            { id: 2, name: "Mathématiques", emoji: "🧮" },
+            { id: 3, name: "Expérience scientifique", emoji: "🔬" },
+            { id: 4, name: "Projet artistique", emoji: "🎨" }
+        ];
+
+        let updated = false;
+        
+        // Check if we need to update default activities
+        frenchActivities.forEach(frenchActivity => {
+            const existingActivity = activities.find(a => a.id === frenchActivity.id);
+            if (existingActivity) {
+                // Update if the name is still in English
+                if (existingActivity.name === "Reading" || 
+                    existingActivity.name === "Math Worksheet" || 
+                    existingActivity.name === "Science Experiment" || 
+                    existingActivity.name === "Art Project") {
+                    existingActivity.name = frenchActivity.name;
+                    existingActivity.emoji = frenchActivity.emoji;
+                    updated = true;
+                }
+            }
+        });
+
+        if (updated) {
+            console.log('Updated default activities to French');
+            saveData();
         }
     }
     
