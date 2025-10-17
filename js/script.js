@@ -380,10 +380,10 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Add sample activities
         activities = [
-            { id: 1, name: "Reading", emoji: "📚" },
-            { id: 2, name: "Math Worksheet", emoji: "🧮" },
-            { id: 3, name: "Science Experiment", emoji: "🔬" },
-            { id: 4, name: "Art Project", emoji: "🎨" }
+            { id: 1, name: "Lecture", emoji: "📚" },
+            { id: 2, name: "Mathématiques", emoji: "🧮" },
+            { id: 3, name: "Expérience scientifique", emoji: "🔬" },
+            { id: 4, name: "Projet artistique", emoji: "🎨" }
         ];
         
         // Initialize tracking
