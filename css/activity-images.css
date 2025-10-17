@@ -5,15 +5,20 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 40px;
-    height: 40px;
+    width: 100px;
+    height: 100px;
     overflow: hidden;
+    margin-bottom: 20px;
+    border-radius: 16px;
+    background-color: #f8f9fa;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
 }
 
 .activity-image {
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
+    border-radius: 12px;
 }
 
 /* Table activity images */

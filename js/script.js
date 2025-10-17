@@ -636,12 +636,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     indicator.style.backgroundColor = getStatusColor(status);
                 }
                 
-                statusElement.appendChild(statusText);
-                statusElement.appendChild(indicator);
-                
-                // Add to activity item
+                // Add to activity item in vertical order: name, status text, emoji
                 activityElement.appendChild(nameElement);
-                activityElement.appendChild(statusElement);
+                activityElement.appendChild(statusText);
+                activityElement.appendChild(indicator);
                 
                 // Make the entire card clickable if not validated or completed
                 if (status !== 'validated' && status !== 'completed') {
@@ -741,12 +739,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     indicator.style.backgroundColor = getStatusColor(status);
                 }
                 
-                statusElement.appendChild(statusText);
-                statusElement.appendChild(indicator);
-                
-                // Add to activity item
+                // Add to activity item in vertical order: name, status text, emoji
                 activityElement.appendChild(nameElement);
-                activityElement.appendChild(statusElement);
+                activityElement.appendChild(statusText);
+                activityElement.appendChild(indicator);
                 
                 // Make the entire card clickable if not validated or completed
                 if (status !== 'validated' && status !== 'completed') {

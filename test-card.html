@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test des cartes d'activités</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/activity-images.css">
+    <link rel="stylesheet" href="css/media-queries.css">
+</head>
+<body>
+    <div style="padding: 20px;">
+        <h1>Test des cartes d'activités</h1>
+        
+        <!-- Test de la grille des activités -->
+        <div class="activities-list">
+            <!-- Carte avec emoji -->
+            <div class="activity-item">
+                <div class="activity-emoji">📚</div>
+                <div class="activity-name">Lecture - Nom très très long pour tester la troncature du texte</div>
+                <div class="activity-status-text not-started-text">Cliquez pour terminer</div>
+                <div class="status-indicator">⌛</div>
+            </div>
+            
+            <!-- Carte avec image -->
+            <div class="activity-item">
+                <div class="activity-emoji activity-image-container">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiByeD0iOCIgZmlsbD0iIzM0OThkYiIvPgo8dGV4dCB4PSIyMCIgeT0iMjYiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNiIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkltZzwvdGV4dD4KPC9zdmc+" 
+                         alt="Test Image" class="activity-image">
+                </div>
+                <div class="activity-name">Mathématiques</div>
+                <div class="activity-status-text completed-text">Terminé</div>
+                <div class="status-indicator">✅</div>
+            </div>
+            
+            <!-- Carte en cours -->
+            <div class="activity-item">
+                <div class="activity-emoji">🎨</div>
+                <div class="activity-name">Arts plastiques</div>
+                <div class="activity-status-text in-progress-text">En cours</div>
+                <div class="status-indicator">🔄</div>
+            </div>
+            
+            <!-- Carte validée -->
+            <div class="activity-item">
+                <div class="activity-emoji">🔬</div>
+                <div class="activity-name">Sciences</div>
+                <div class="activity-status-text validated-text">Validé</div>
+                <div class="status-indicator">⭐</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

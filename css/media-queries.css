@@ -2,18 +2,45 @@
 @media screen and (max-width: 1200px) {
     .activities-list {
         grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
     }
 }
 
 @media screen and (max-width: 900px) {
     .activities-list {
         grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
     }
 }
 
 @media screen and (max-width: 600px) {
     .activities-list {
         grid-template-columns: 1fr;
+        gap: 16px;
+        padding: 8px;
+    }
+    
+    .activity-item {
+        min-height: 240px;
+        max-height: 300px;
+        padding: 20px;
+    }
+    
+    .activity-name {
+        font-size: 13px;
+        min-height: 32px;
+        max-height: 32px;
+    }
+    
+    .activity-emoji {
+        font-size: 52px;
+        height: 90px;
+        width: 90px;
+    }
+    
+    .activity-image-container {
+        width: 90px;
+        height: 90px;
     }
 }
 
